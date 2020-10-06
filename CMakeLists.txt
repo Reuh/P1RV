@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(P1RV main.cpp)
 
-target_link_libraries(P1RV sfml-graphics sfml-system sfml-window)
+target_link_libraries(P1RV sfml-graphics sfml-system sfml-window opengl32)
 if (WIN32)
     set_target_properties(P1RV PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 endif(WIN32)
