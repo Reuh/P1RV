@@ -3,7 +3,7 @@ project(P1RV)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(P1RV main.cpp)
+add_executable(P1RV main.cpp Component.h Renderer.h CubeRenderer.cpp GameObject.cpp GameObject.h CubeRenderer.h Scene.cpp Scene.h TestScene.cpp TestScene.h)
 
 target_link_libraries(P1RV sfml-graphics sfml-system sfml-window opengl32)
 if (WIN32)
