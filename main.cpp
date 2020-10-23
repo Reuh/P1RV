@@ -1,9 +1,12 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <GL/glew.h>
 #include <SFML/OpenGL.hpp>
 #include "GameObject.h"
 #include "Scene.h"
 #include "TestScene.h"
+#include <GL/glu.h>
+
 
 int main()
 {
@@ -12,8 +15,33 @@ int main()
     window.setVerticalSyncEnabled(true);
     window.setActive(true);
 
+    glewInit();
+
     glClearColor(0, 0, 0, 0);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+
+    glMatrixMode(GL_PROJECTION);
+   
+    // Resetting matrix
+    glLoadIdentity();
+
+    // Viewport
+    glViewport(0, 0, 800, 600);
+
+    // Mise en place de la perspective
+    gluPerspective(60, 800/600, 0.1f, 10.f);
+
+    // Placement de la caméra
+    gluLookAt(0, 0, 2, 0, 0, 0, 0, 1, 0);
+
+    // Retourne a la pile modelview
+    glMatrixMode(GL_MODELVIEW);
+
+    glScalef(0.05f, 0.05f, 0.05f);
+
+    Scene* actualScene = new TestScene();
+    actualScene->initialize();
 
     // Game Loop
     while (window.isOpen())
