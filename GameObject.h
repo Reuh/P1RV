@@ -8,14 +8,20 @@
 
 #include <vector>
 #include "Component.h"
+#include "Transform.h"
 
 class GameObject {
 private:
+    static unsigned idCounter;
+    unsigned id;
     std::vector<Component*> componentList;
     // TODO Add Transform and Renderer Components as separate references (Optimization)
 public:
-    // TODO Add const id attribute
+    GameObject() {
+        this->id = idCounter++;
+    }
     void addComponent(Component* newComponent);
+    unsigned getId() const;
 
     template<typename T> T* getComponent() {
         for (Component* component : componentList) {
