@@ -15,7 +15,8 @@ private:
     static unsigned idCounter;
     unsigned id;
     std::vector<Component*> componentList;
-    // TODO Add Transform and Renderer Components as separate references (Optimization)
+    Transform transform;
+    // TODO Add Renderer Components as separate references (Optimization)
 public:
     GameObject() {
         this->id = idCounter++;
@@ -29,6 +30,10 @@ public:
                 return dynamic_cast<T *>(component);
         }
         return nullptr;
+    }
+
+    Transform * getComponent() {
+        return &(this->transform);
     }
 
     template<typename T> std::vector<T*> getComponents() {
