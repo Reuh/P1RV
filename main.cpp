@@ -11,6 +11,7 @@
 #include <sstream>
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
+#include "BoxCollider.h"
 
 // Player position
 const glm::vec3 up(0,1,0); // up axis, fixed
@@ -140,7 +141,7 @@ int main()
                     std::cout << "MouseButtonReleased" << std::endl;
                     break;
                 case sf::Event::MouseMoved:
-                    std::cout << "MouseMoved" << std::endl;
+                    //std::cout << "MouseMoved" << std::endl;
                     break;
                 case sf::Event::JoystickButtonPressed:
                     std::cout << "JoystickButtonPressed" << std::endl;
@@ -198,6 +199,17 @@ int main()
         front = glm::rotate(glm::vec3(1,0,0), angleY, up);
         right = glm::cross(front, up);
         eye = glm::rotate(front, angleX, right);
+
+        // Fire
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            auto objList = actualScene->getObjectList();
+            for(auto iter = objList->begin() ; iter != objList->end(); ++iter) {
+                BoxCollider* coll = (*iter)->getComponent<BoxCollider>();
+                if (coll != nullptr && coll->collideRay(position, eye)) {
+                   std::cout << "Touché!" << std::endl;
+                }
+            }
+        }
 
         // Update camera
         glMatrixMode(GL_PROJECTION);

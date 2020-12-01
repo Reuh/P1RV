@@ -5,8 +5,12 @@
 #include "TestScene.h"
 #include "CubeRenderer.h"
 #include "ModelRenderer.h"
+#include "BoxCollider.h"
 
+#include <glm/glm.hpp>
 #include <iostream>
+
+using namespace glm;
 
 void TestScene::initialize() {
     CubeRenderer* cr = new CubeRenderer();
@@ -16,6 +20,7 @@ void TestScene::initialize() {
 
     auto model = new GameObject();
     model->addComponent(new ModelRenderer("models/Penguin.obj"));
+    model->addComponent(new BoxCollider(vec3(-1,-1,-1), vec3(1,1,1)));
     addObject(model);
 }
 
