@@ -9,6 +9,19 @@
 #include <SFML/System.hpp>
 #include <fstream>
 #include <sstream>
+#include <glm/glm.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+
+// Player position
+const glm::vec3 up(0,1,0); // up axis, fixed
+glm::vec3 position(-2,0,0); // player position
+glm::vec3 front(1,0,0); // player front axis (parrallel to the horizontal) = rotate((1,0,0), angleX, up)
+glm::vec3 right(0,0,1); // player right axis (parrallel to the horizontal) = cross(front, up)
+glm::vec3 eye(1,0,0); // player eye direction = rotate(front, angleX, right)
+float speed = 1; // movement speed per second
+float angleX = 0; // eye rotation
+float angleY = 0;
+float rotateSpeed = 0.1; // rotation speed per second
 
 int main()
 {
@@ -35,7 +48,7 @@ int main()
     gluPerspective(60, 800/600, 0.1f, 10.f);
 
     // Placement de la caméra
-    gluLookAt(0, 0, 2, 0, 0, 0, 0, 1, 0);
+    gluLookAt(0, 0, 2, 0, 0, 1, 0, 1, 0);
 
     // Retourne a la pile modelview
     glMatrixMode(GL_MODELVIEW);
@@ -96,6 +109,13 @@ int main()
     Scene* actualScene = new TestScene();
     actualScene->initialize();
 
+    // Time
+    sf::Clock clock;
+
+    // Movement
+    sf::Mouse::setPosition(sf::Vector2i(400, 300), window);
+    sf::Vector2i mousePosition = sf::Mouse::getPosition();
+
     // Game Loop
     while (window.isOpen())
     {
@@ -147,6 +167,44 @@ int main()
                     break;
             }
         }
+
+        // Get delta time
+        sf::Time elapsed = clock.restart();
+        float dt = elapsed.asSeconds();
+
+        // Player movement
+        // TODO: separate into a PlayerMovement component
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            position += right * speed*dt;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            position -= right * speed*dt;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            position += front * speed*dt;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            position -= front * speed*dt;
+        }
+
+        sf::Vector2i newMousePosition = sf::Mouse::getPosition();
+        sf::Vector2i diff = newMousePosition - mousePosition;
+        sf::Mouse::setPosition(sf::Vector2i(400, 300), window); // re-center mouse
+        mousePosition = sf::Mouse::getPosition();
+        angleY += -diff.x * rotateSpeed * dt;
+        angleX += -diff.y * rotateSpeed * dt;
+
+        // Update position vectors
+        front = glm::rotate(glm::vec3(1,0,0), angleY, up);
+        right = glm::cross(front, up);
+        eye = glm::rotate(front, angleX, right);
+
+        // Update camera
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glViewport(0, 0, 800, 600);
+        gluPerspective(60, 800/600, 0.1f, 10.f);
+        gluLookAt(position.x, position.y, position.z, position.x+eye.x, position.y+eye.y, position.z+eye.z, up.x, up.y, up.z);
 
         // Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
