@@ -29,7 +29,7 @@ public:
 	// mesh data
     vector<Vertex>       vertices;
     vector<unsigned int> indices;
-    Texture          texture;
+    Texture              texture;
 
     MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices, Texture texture);
 

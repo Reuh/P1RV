@@ -15,7 +15,6 @@ void TestScene::initialize() {
     addObject(test);
 
     auto model = new GameObject();
-    std::cout << "init scene" << std::endl;
     model->addComponent(new ModelRenderer("models/Penguin.obj"));
     addObject(model);
 }

@@ -6,7 +6,9 @@
 #include "Scene.h"
 #include "TestScene.h"
 #include <GL/glu.h>
-
+#include <SFML/System.hpp>
+#include <fstream>
+#include <sstream>
 
 int main()
 {
@@ -40,6 +42,57 @@ int main()
 
     glScalef(0.05f, 0.05f, 0.05f);
 
+    // Load fragment shader
+    std::string fragmentCode;
+    std::ifstream fShaderFile;
+    fShaderFile.open("shaders/frag.glsl");
+    std::stringstream fShaderStream;
+    fShaderStream << fShaderFile.rdbuf();
+    fShaderFile.close();
+    fragmentCode = fShaderStream.str();
+
+    const char* fCode = fragmentCode.c_str();
+    unsigned int fragment = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment, 1, &fCode, NULL);
+    glCompileShader(fragment);
+    // TODO: check shader compilation errors
+
+    // Load vertex shader
+    std::string vertexCode;
+    std::ifstream vShaderFile;
+    vShaderFile.open("shaders/vertex.glsl");
+    std::stringstream vShaderStream;
+    vShaderStream << vShaderFile.rdbuf();
+    vShaderFile.close();
+    vertexCode = vShaderStream.str();
+
+    const char* vCode = vertexCode.c_str();
+    unsigned int vertex = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex, 1, &vCode, NULL);
+    glCompileShader(vertex);
+    // TODO: check shader compilation errors
+
+    unsigned int ID = glCreateProgram();
+    glAttachShader(ID, vertex);
+    glAttachShader(ID, fragment);
+    glLinkProgram(ID);
+    // TODO: show linking errors
+
+    // delete the shaders as they're linked into our program now and no longer necessary
+    glDeleteShader(vertex);
+    glDeleteShader(fragment);
+
+/*
+    // SFML shaders: doesn't seem to work on 3D
+    sf::Shader shader;
+    if (!shader.loadFromFile("shaders/vertex.glsl", "shaders/frag.glsl"))
+        std::cerr << "ERROR: can't load shaders" << std::endl;
+
+    shader.setUniform("texture", sf::Shader::CurrentTexture);
+    sf::Shader::bind(&shader);
+*/
+
+    // Init scene
     Scene* actualScene = new TestScene();
     actualScene->initialize();
 
