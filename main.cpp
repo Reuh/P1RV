@@ -11,7 +11,7 @@
 #include <sstream>
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-#include "BoxCollider.h"
+#include "Collider.h"
 
 // Player position
 const glm::vec3 up(0,1,0); // up axis, fixed
@@ -135,7 +135,17 @@ int main()
                     std::cout << "KeyReleased" << std::endl;
                     break;
                 case sf::Event::MouseButtonPressed:
-                    std::cout << "MouseButtonPressed" << std::endl;
+                    //std::cout << "MouseButtonPressed" << std::endl;
+                    // Fire
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        auto objList = actualScene->getObjectList();
+                        for(auto iter = objList->begin() ; iter != objList->end(); ++iter) {
+                            Collider* coll = (*iter)->getComponent<Collider>();
+                            if (coll != nullptr && coll->collideRay(position, eye)) {
+                               std::cout << "Touché!" << std::endl;
+                            }
+                        }
+                    }
                     break;
                 case sf::Event::MouseButtonReleased:
                     std::cout << "MouseButtonReleased" << std::endl;
@@ -199,17 +209,6 @@ int main()
         front = glm::rotate(glm::vec3(1,0,0), angleY, up);
         right = glm::cross(front, up);
         eye = glm::rotate(front, angleX, right);
-
-        // Fire
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            auto objList = actualScene->getObjectList();
-            for(auto iter = objList->begin() ; iter != objList->end(); ++iter) {
-                BoxCollider* coll = (*iter)->getComponent<BoxCollider>();
-                if (coll != nullptr && coll->collideRay(position, eye)) {
-                   std::cout << "Touché!" << std::endl;
-                }
-            }
-        }
 
         // Update camera
         glMatrixMode(GL_PROJECTION);

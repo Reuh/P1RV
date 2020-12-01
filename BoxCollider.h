@@ -1,13 +1,13 @@
 #ifndef P1RV_BOXCOLLIDER_H
 #define P1RV_BOXCOLLIDER_H
 
-#include "Component.h"
+#include "Collider.h"
 #include <glm/glm.hpp>
 #include <algorithm>
 
 using namespace glm;
 
-class BoxCollider : public Component {
+class BoxCollider : public Collider {
 protected:
 	vec3 lb; // left-bottom corner (minimal coordinates)
 	vec3 rt; // right-top corner (maximal coordinates)
