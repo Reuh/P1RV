@@ -96,16 +96,6 @@ int main()
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 
-/*
-    // SFML shaders: doesn't seem to work on 3D
-    sf::Shader shader;
-    if (!shader.loadFromFile("shaders/vertex.glsl", "shaders/frag.glsl"))
-        std::cerr << "ERROR: can't load shaders" << std::endl;
-
-    shader.setUniform("texture", sf::Shader::CurrentTexture);
-    sf::Shader::bind(&shader);
-*/
-
     // Init scene
     Scene* actualScene = new TestScene();
     actualScene->initialize();
@@ -220,6 +210,7 @@ int main()
         // Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        glUseProgram(ID);
         actualScene->draw();
 
         // Swap buffers
