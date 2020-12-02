@@ -7,12 +7,11 @@
 #include "TestScene.h"
 #include <GL/glu.h>
 #include <SFML/System.hpp>
-#include <fstream>
-#include <sstream>
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include "Collider.h"
 #include <algorithm>
+#include "Shader.hpp"
 
 // Player position
 const glm::vec3 up(0,1,0); // up axis, fixed
@@ -24,27 +23,6 @@ float speed = 1; // movement speed per second
 float angleX = 0; // eye rotation
 float angleY = 0;
 float rotateSpeed = 0.1; // rotation speed per second
-
-// Check for shader compilation error
-// TODO: put into Shader class
-void checkCompileErrors(GLuint shader, const std::string &type){
-    GLint success;
-    GLchar message[1024];
-    if(type != "PROGRAM") {
-        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-        if(!success) {
-            glGetShaderInfoLog(shader, 1024, NULL, message);
-            std::cerr << "[ERROR] Shader compilation error for " << type << ": " << message << std::endl;
-        }
-    } else {
-        glGetProgramiv(shader, GL_LINK_STATUS, &success);
-        if(!success) {
-            glGetProgramInfoLog(shader, 1024, NULL, message);
-            std::cerr << "[ERROR] Shader linking error: " << message << std::endl;
-        }
-    }
-}
-
 
 int main()
 {
@@ -61,6 +39,9 @@ int main()
     window.setActive(true);
 
     glewInit();
+
+    // Load shader
+    Shader shader = Shader("shaders/vertex.glsl", "shaders/frag.glsl");
 
     glClearColor(0, 0, 0, 0);
     glEnable(GL_DEPTH_TEST);
@@ -83,46 +64,6 @@ int main()
     glMatrixMode(GL_MODELVIEW);
 
     glScalef(0.05f, 0.05f, 0.05f);
-
-    // Load fragment shader
-    std::string fragmentCode;
-    std::ifstream fShaderFile;
-    fShaderFile.open("shaders/frag.glsl");
-    std::stringstream fShaderStream;
-    fShaderStream << fShaderFile.rdbuf();
-    fShaderFile.close();
-    fragmentCode = fShaderStream.str();
-
-    const char* fCode = fragmentCode.c_str();
-    unsigned int fragment = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment, 1, &fCode, NULL);
-    glCompileShader(fragment);
-    checkCompileErrors(fragment, "FRAGMENT");
-
-    // Load vertex shader
-    std::string vertexCode;
-    std::ifstream vShaderFile;
-    vShaderFile.open("shaders/vertex.glsl");
-    std::stringstream vShaderStream;
-    vShaderStream << vShaderFile.rdbuf();
-    vShaderFile.close();
-    vertexCode = vShaderStream.str();
-
-    const char* vCode = vertexCode.c_str();
-    unsigned int vertex = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex, 1, &vCode, NULL);
-    glCompileShader(vertex);
-    checkCompileErrors(vertex, "VERTEX");
-
-    unsigned int ID = glCreateProgram();
-    glAttachShader(ID, vertex);
-    glAttachShader(ID, fragment);
-    glLinkProgram(ID);
-    checkCompileErrors(ID, "PROGRAM");
-
-    // delete the shaders as they're linked into our program now and no longer necessary
-    glDeleteShader(vertex);
-    glDeleteShader(fragment);
 
     // Init scene
     Scene* actualScene = new TestScene();
@@ -245,10 +186,10 @@ int main()
         GLfloat projection[16]; 
         glGetFloatv(GL_PROJECTION_MATRIX, projection);
 
-        glUniformMatrix4fv(glGetUniformLocation(ID, "modelview"), 1, GL_FALSE, &model[0]);
-        glUniformMatrix4fv(glGetUniformLocation(ID, "projection"), 1, GL_FALSE, &projection[0]);
+        shader.sendUniform("modelview", model);
+        shader.sendUniform("projection", projection);
 
-        glUseProgram(ID);
+        shader.use();
         actualScene->draw();
 
         // Swap buffers
