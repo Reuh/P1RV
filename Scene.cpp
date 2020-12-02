@@ -7,19 +7,30 @@
 #include "Scene.h"
 #include "Renderer.h"
 #include "Transform.h"
+#include "MatrixStack.hpp"
+#include "Shader.hpp"
 
 void Scene::addObject(GameObject *newObject) {
     objectList.push_back(newObject);
 }
 
-void Scene::draw() {
+void Scene::draw(Shader* shader) {
+    shader->use();
+
     for (GameObject* object : objectList) {
         auto* renderer = object->getComponent<Renderer>();
         if (renderer != nullptr) {
-            glPushMatrix();
-            object->getComponent<Transform>()->apply();
-            renderer->render();
-            glPopMatrix();
+            auto* transform = object->getComponent<Transform>();
+            if (transform != nullptr) {
+                pushMatrix();
+                object->getComponent<Transform>()->apply();
+                shader->sendUniform("modelViewProjection", getMVPMatrix());
+                renderer->render(shader);
+                popMatrix();
+            } else {
+                shader->sendUniform("modelViewProjection", getMVPMatrix());
+                renderer->render(shader);
+            }
         }
     }
 }

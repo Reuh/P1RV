@@ -7,11 +7,12 @@
 
 
 #include "Renderer.h"
+#include "Shader.hpp"
 
 class CubeRenderer : public Renderer {
 private:
 public:
-    void render() override;
+    void render(Shader* shader) override;
 
 };
 

@@ -6,6 +6,7 @@
 #include "CubeRenderer.h"
 #include "ModelRenderer.h"
 #include "BoxCollider.h"
+#include "Transform.h"
 
 #include <glm/glm.hpp>
 #include <iostream>
@@ -21,6 +22,9 @@ void TestScene::initialize() {
     auto model = new GameObject();
     model->addComponent(new ModelRenderer("models/cube/cube.gltf"));
     model->addComponent(new BoxCollider(vec3(-1,-1,-1), vec3(1,1,1)));
+    Transform* transform = new Transform();
+    transform->scale(vec3(0.5,0.5,0.5));
+    model->addComponent(transform);
     addObject(model);
 }
 

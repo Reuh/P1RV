@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "Shader.hpp"
 
 using namespace std;
 
@@ -34,7 +35,7 @@ public:
 
     MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices, Texture texture);
 
-    void render() override;
+    void render(Shader* shader) override;
 };
 
 #endif //P1RV_MESHRENDERER_H

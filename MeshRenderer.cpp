@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 #include "MeshRenderer.h"
+#include "Shader.hpp"
 
 #include <iostream>
 
@@ -37,7 +38,7 @@ MeshRenderer::MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices
     glBindVertexArray(0);
 }
 
-void MeshRenderer::render() {
+void MeshRenderer::render(Shader* shader) {
     // bind texture
     sf::Texture::bind(&texture.tex);
 

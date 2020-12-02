@@ -4,8 +4,9 @@
 
 #include <GL/gl.h>
 #include "CubeRenderer.h"
+#include "Shader.hpp"
 
-void CubeRenderer::render() {
+void CubeRenderer::render(Shader* shader) {
     glBegin(GL_QUADS);
 
     glColor3f(1.0f, 0.0f, 0.0f);

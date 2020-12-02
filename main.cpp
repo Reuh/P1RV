@@ -12,6 +12,7 @@
 #include "Collider.h"
 #include <algorithm>
 #include "Shader.hpp"
+#include "MatrixStack.hpp"
 
 // Player position
 const glm::vec3 up(0,1,0); // up axis, fixed
@@ -23,11 +24,6 @@ float speed = 1; // movement speed per second
 float angleX = 0; // eye rotation
 float angleY = 0;
 float rotateSpeed = 0.1; // rotation speed per second
-
-// Transformations matrixes
-glm::mat4 projection;
-glm::mat4 view;
-glm::mat4 model;
 
 int main()
 {
@@ -51,13 +47,11 @@ int main()
     // Load shader
     Shader shader = Shader("shaders/vertex.glsl", "shaders/frag.glsl");
 
-    // Setup matrices
+    // Setup default matrices
     // Mise en place de la perspective
-    projection = glm::perspective(glm::radians(60.0f), (float)800 / (float)600, 0.1f, 10.0f);
+    setProjection(glm::perspective(glm::radians(60.0f), (float)800 / (float)600, 0.1f, 100.0f));
     // Placement de la caméra
-    view = glm::lookAt(glm::vec3(0.f, 0.f, 2.f), glm::vec3(0.f, 0.f, 1.f), glm::vec3(0.f, 1.f, 0.f));
-    // Retourne a la pile modelview
-    model = glm::scale(glm::vec3(0.05f, 0.05f, 0.05f));
+    setView(glm::lookAt(position, position+eye, up));
 
     // Init scene
     Scene* actualScene = new TestScene();
@@ -138,18 +132,14 @@ int main()
 
         // Player movement
         // TODO: separate into a PlayerMovement component
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
             position += right * speed*dt;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
             position -= right * speed*dt;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
             position += front * speed*dt;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
             position -= front * speed*dt;
-        }
 
         sf::Vector2i newMousePosition = sf::Mouse::getPosition();
         sf::Vector2i diff = newMousePosition - mousePosition;
@@ -157,7 +147,7 @@ int main()
         mousePosition = sf::Mouse::getPosition();
         angleY += -diff.x * rotateSpeed * dt;
         angleX += -diff.y * rotateSpeed * dt;
-        //angleX = std::min(std::max(angleX, -3.14f/2), 3.14f/2);
+        angleX = std::min(std::max(angleX, -3.14f/2), 3.14f/2); // prevent infinite rotation on x axis
 
         // Update position vectors
         front = glm::rotate(glm::vec3(1,0,0), angleY, up);
@@ -165,15 +155,12 @@ int main()
         eye = glm::rotate(front, angleX, right);
 
         // Update camera
-        view = glm::lookAt(position, position+eye, up);
+        setView(glm::lookAt(position, position+eye, up));
 
         // Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        shader.use();
-        shader.sendUniform("modelViewProjection", projection * view * model);
-        
-        actualScene->draw();
+        actualScene->draw(&shader);
 
         // Swap buffers
         window.display();

@@ -5,9 +5,11 @@
 #ifndef P1RV_COMPONENT_H
 #define P1RV_COMPONENT_H
 
+class GameObject; // forward declaration (cycle)
 
 class Component {
 public:
+	GameObject* object;
     virtual ~Component() = default;
 };
 

@@ -7,6 +7,7 @@
 unsigned GameObject::idCounter = 0;
 
 void GameObject::addComponent(Component* newComponent) {
+	newComponent->object = this;
     componentList.push_back(newComponent);
 }
 

@@ -2,6 +2,7 @@
 #include "ModelRenderer.h"
 #include <iostream>
 #include <string>
+#include "Shader.hpp"
 
 vector<Texture> textures_loaded; // global texture cache
 
@@ -19,9 +20,9 @@ ModelRenderer::ModelRenderer(string path) {
     processNode(scene->mRootNode, scene);
 }
 
-void ModelRenderer::render() {
+void ModelRenderer::render(Shader* shader) {
     for(unsigned int i = 0; i < meshes.size(); i++)
-        meshes[i].render();
+        meshes[i].render(shader);
 }
 
 void ModelRenderer::processNode(aiNode *node, const aiScene *scene)

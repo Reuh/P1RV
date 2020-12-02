@@ -8,6 +8,7 @@
 
 #include <vector>
 #include "GameObject.h"
+#include "Shader.hpp"
 
 // At the end this class can just load a Scene information from a file specified in the constructor
 class Scene {
@@ -24,7 +25,7 @@ public:
     virtual void update() = 0;
     // TODO To decouple the scope of rendering from this class, it would be better a function to return the list of objects to be rendered
     // It's also nice to use a fixed pointer that can be accessed only once
-    void draw();
+    void draw(Shader* shader);
 };
 
 

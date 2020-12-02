@@ -9,6 +9,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "Shader.hpp"
 
 
 using namespace std;
@@ -27,7 +28,7 @@ public:
 
     ModelRenderer(string path);
 
-    void render() override;
+    void render(Shader* shader) override;
 };
 
 #endif //P1RV_MODELRENDERER_H
