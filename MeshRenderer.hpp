@@ -1,7 +1,7 @@
 #ifndef P1RV_MESHRENDERER_H
 #define P1RV_MESHRENDERER_H
 
-#include "Renderer.h"
+#include "Renderer.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 #include <string>

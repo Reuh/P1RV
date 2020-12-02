@@ -6,7 +6,7 @@
 #define P1RV_RENDERER_H
 
 
-#include "Component.h"
+#include "Component.hpp"
 #include "Shader.hpp"
 
 class Renderer : public Component {

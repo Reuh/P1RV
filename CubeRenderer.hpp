@@ -6,7 +6,7 @@
 #define P1RV_CUBERENDERER_H
 
 
-#include "Renderer.h"
+#include "Renderer.hpp"
 #include "Shader.hpp"
 
 class CubeRenderer : public Renderer {

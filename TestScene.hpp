@@ -6,7 +6,7 @@
 #define P1RV_TESTSCENE_H
 
 
-#include "Scene.h"
+#include "Scene.hpp"
 
 class TestScene : public Scene {
 private:

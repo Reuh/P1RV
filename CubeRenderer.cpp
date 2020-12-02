@@ -3,7 +3,7 @@
 //
 
 #include <GL/gl.h>
-#include "CubeRenderer.h"
+#include "CubeRenderer.hpp"
 #include "Shader.hpp"
 
 void CubeRenderer::render(Shader* shader) {

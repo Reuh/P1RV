@@ -2,11 +2,11 @@
 // Created by iagoc on 11/10/2020.
 //
 
-#include "TestScene.h"
-#include "CubeRenderer.h"
-#include "ModelRenderer.h"
-#include "BoxCollider.h"
-#include "Transform.h"
+#include "TestScene.hpp"
+#include "CubeRenderer.hpp"
+#include "ModelRenderer.hpp"
+#include "BoxCollider.hpp"
+#include "Transform.hpp"
 
 #include <glm/glm.hpp>
 #include <iostream>

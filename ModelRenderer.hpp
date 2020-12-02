@@ -1,8 +1,8 @@
 #ifndef P1RV_MODELRENDERER_H
 #define P1RV_MODELRENDERER_H
 
-#include "MeshRenderer.h"
-#include "Renderer.h"
+#include "MeshRenderer.hpp"
+#include "Renderer.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 #include <string>

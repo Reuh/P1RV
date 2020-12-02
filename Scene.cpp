@@ -4,9 +4,9 @@
 
 #include <iostream>
 #include <GL/gl.h>
-#include "Scene.h"
-#include "Renderer.h"
-#include "Transform.h"
+#include "Scene.hpp"
+#include "Renderer.hpp"
+#include "Transform.hpp"
 #include "MatrixStack.hpp"
 #include "Shader.hpp"
 

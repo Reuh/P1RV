@@ -7,8 +7,8 @@
 
 
 #include <vector>
-#include "Component.h"
-#include "Transform.h"
+#include "Component.hpp"
+#include "Transform.hpp"
 
 class GameObject {
 private:

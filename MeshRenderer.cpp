@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include "MeshRenderer.h"
+#include "MeshRenderer.hpp"
 #include "Shader.hpp"
 
 #include <iostream>

@@ -6,7 +6,7 @@
 #define P1RV_TRANSFORM_H
 
 #include <SFML/System.hpp>
-#include "Component.h"
+#include "Component.hpp"
 #include <glm/glm.hpp>
 
 class Transform : public Component {

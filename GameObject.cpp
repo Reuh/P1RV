@@ -2,7 +2,7 @@
 // Created by iagoc on 10/10/2020.
 //
 
-#include "GameObject.h"
+#include "GameObject.hpp"
 
 unsigned GameObject::idCounter = 0;
 

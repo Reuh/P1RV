@@ -1,10 +1,10 @@
 #ifndef P1RV_BOXCOLLIDER_H
 #define P1RV_BOXCOLLIDER_H
 
-#include "Collider.h"
+#include "Collider.hpp"
 #include <glm/glm.hpp>
 #include <algorithm>
-#include "Transform.h"
+#include "Transform.hpp"
 
 using namespace glm;
 

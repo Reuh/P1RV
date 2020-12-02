@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include "ModelRenderer.h"
+#include "ModelRenderer.hpp"
 #include <iostream>
 #include <string>
 #include "Shader.hpp"

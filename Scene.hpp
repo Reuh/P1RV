@@ -7,7 +7,7 @@
 
 
 #include <vector>
-#include "GameObject.h"
+#include "GameObject.hpp"
 #include "Shader.hpp"
 
 // At the end this class can just load a Scene information from a file specified in the constructor

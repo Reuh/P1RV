@@ -2,7 +2,7 @@
 #define P1RV_COLLIDER_H
 
 
-#include "Component.h"
+#include "Component.hpp"
 #include <glm/glm.hpp>
 
 class Collider : public Component {
