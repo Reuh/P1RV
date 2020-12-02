@@ -12,6 +12,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include "Collider.h"
+#include <algorithm>
 
 // Player position
 const glm::vec3 up(0,1,0); // up axis, fixed
@@ -24,10 +25,38 @@ float angleX = 0; // eye rotation
 float angleY = 0;
 float rotateSpeed = 0.1; // rotation speed per second
 
+// Check for shader compilation error
+// TODO: put into Shader class
+void checkCompileErrors(GLuint shader, const std::string &type){
+    GLint success;
+    GLchar message[1024];
+    if(type != "PROGRAM") {
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+        if(!success) {
+            glGetShaderInfoLog(shader, 1024, NULL, message);
+            std::cerr << "[ERROR] Shader compilation error for " << type << ": " << message << std::endl;
+        }
+    } else {
+        glGetProgramiv(shader, GL_LINK_STATUS, &success);
+        if(!success) {
+            glGetProgramInfoLog(shader, 1024, NULL, message);
+            std::cerr << "[ERROR] Shader linking error: " << message << std::endl;
+        }
+    }
+}
+
+
 int main()
 {
     // Setup
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Making the basic structure");
+    sf::ContextSettings settings;
+    settings.depthBits = 24;
+    settings.stencilBits = 8;
+    settings.antialiasingLevel = 4;
+    settings.majorVersion = 3;
+    settings.minorVersion = 0;
+
+    sf::Window window(sf::VideoMode(800, 600), "Making the basic structure", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
     window.setActive(true);
 
@@ -35,7 +64,6 @@ int main()
 
     glClearColor(0, 0, 0, 0);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_TEXTURE_2D);
 
     glMatrixMode(GL_PROJECTION);
    
@@ -69,7 +97,7 @@ int main()
     unsigned int fragment = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment, 1, &fCode, NULL);
     glCompileShader(fragment);
-    // TODO: check shader compilation errors
+    checkCompileErrors(fragment, "FRAGMENT");
 
     // Load vertex shader
     std::string vertexCode;
@@ -84,13 +112,13 @@ int main()
     unsigned int vertex = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex, 1, &vCode, NULL);
     glCompileShader(vertex);
-    // TODO: check shader compilation errors
+    checkCompileErrors(vertex, "VERTEX");
 
     unsigned int ID = glCreateProgram();
     glAttachShader(ID, vertex);
     glAttachShader(ID, fragment);
     glLinkProgram(ID);
-    // TODO: show linking errors
+    checkCompileErrors(ID, "PROGRAM");
 
     // delete the shaders as they're linked into our program now and no longer necessary
     glDeleteShader(vertex);
@@ -194,6 +222,7 @@ int main()
         mousePosition = sf::Mouse::getPosition();
         angleY += -diff.x * rotateSpeed * dt;
         angleX += -diff.y * rotateSpeed * dt;
+        //angleX = std::min(std::max(angleX, -3.14f/2), 3.14f/2);
 
         // Update position vectors
         front = glm::rotate(glm::vec3(1,0,0), angleY, up);
@@ -209,6 +238,15 @@ int main()
 
         // Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // TODO: switch to modern OpenGL pipeline fully
+        GLfloat model[16]; 
+        glGetFloatv(GL_MODELVIEW_MATRIX, model);
+        GLfloat projection[16]; 
+        glGetFloatv(GL_PROJECTION_MATRIX, projection);
+
+        glUniformMatrix4fv(glGetUniformLocation(ID, "modelview"), 1, GL_FALSE, &model[0]);
+        glUniformMatrix4fv(glGetUniformLocation(ID, "projection"), 1, GL_FALSE, &projection[0]);
 
         glUseProgram(ID);
         actualScene->draw();

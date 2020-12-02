@@ -71,8 +71,9 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
             vertex.TexCoords = vec;
         }
         else
-            vertex.TexCoords = glm::vec2(0.0f, 0.0f);  
+            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 
+        vertex.Color = glm::vec4(1.f, 1.f, 1.f, 1.f); // TODO: extract value from model to support untextured faces
         
         vertices.push_back(vertex);
     }
@@ -88,7 +89,7 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
     if(mesh->mMaterialIndex >= 0)
     {
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-        Texture diffuseMap = loadMaterialTextures(material, aiTextureType_DIFFUSE);
+        texture = loadMaterialTextures(material, aiTextureType_DIFFUSE);
     }
 
     MeshRenderer r = MeshRenderer(vertices, indices, texture);

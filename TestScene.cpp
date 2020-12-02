@@ -19,7 +19,7 @@ void TestScene::initialize() {
     addObject(test);
 
     auto model = new GameObject();
-    model->addComponent(new ModelRenderer("models/Penguin.obj"));
+    model->addComponent(new ModelRenderer("models/cube/cube.gltf"));
     model->addComponent(new BoxCollider(vec3(-1,-1,-1), vec3(1,1,1)));
     addObject(model);
 }
