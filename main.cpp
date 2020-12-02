@@ -5,9 +5,9 @@
 #include "GameObject.h"
 #include "Scene.h"
 #include "TestScene.h"
-#include <GL/glu.h>
 #include <SFML/System.hpp>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include "Collider.h"
 #include <algorithm>
@@ -24,9 +24,14 @@ float angleX = 0; // eye rotation
 float angleY = 0;
 float rotateSpeed = 0.1; // rotation speed per second
 
+// Transformations matrixes
+glm::mat4 projection;
+glm::mat4 view;
+glm::mat4 model;
+
 int main()
 {
-    // Setup
+    // Setup window
     sf::ContextSettings settings;
     settings.depthBits = 24;
     settings.stencilBits = 8;
@@ -38,32 +43,21 @@ int main()
     window.setVerticalSyncEnabled(true);
     window.setActive(true);
 
+    // Setup OpenGL
     glewInit();
+    glClearColor(0, 0, 0, 0);
+    glEnable(GL_DEPTH_TEST);
 
     // Load shader
     Shader shader = Shader("shaders/vertex.glsl", "shaders/frag.glsl");
 
-    glClearColor(0, 0, 0, 0);
-    glEnable(GL_DEPTH_TEST);
-
-    glMatrixMode(GL_PROJECTION);
-   
-    // Resetting matrix
-    glLoadIdentity();
-
-    // Viewport
-    glViewport(0, 0, 800, 600);
-
+    // Setup matrices
     // Mise en place de la perspective
-    gluPerspective(60, 800/600, 0.1f, 10.f);
-
+    projection = glm::perspective(glm::radians(60.0f), (float)800 / (float)600, 0.1f, 10.0f);
     // Placement de la caméra
-    gluLookAt(0, 0, 2, 0, 0, 1, 0, 1, 0);
-
+    view = glm::lookAt(glm::vec3(0.f, 0.f, 2.f), glm::vec3(0.f, 0.f, 1.f), glm::vec3(0.f, 1.f, 0.f));
     // Retourne a la pile modelview
-    glMatrixMode(GL_MODELVIEW);
-
-    glScalef(0.05f, 0.05f, 0.05f);
+    model = glm::scale(glm::vec3(0.05f, 0.05f, 0.05f));
 
     // Init scene
     Scene* actualScene = new TestScene();
@@ -171,25 +165,14 @@ int main()
         eye = glm::rotate(front, angleX, right);
 
         // Update camera
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glViewport(0, 0, 800, 600);
-        gluPerspective(60, 800/600, 0.1f, 10.f);
-        gluLookAt(position.x, position.y, position.z, position.x+eye.x, position.y+eye.y, position.z+eye.z, up.x, up.y, up.z);
+        view = glm::lookAt(position, position+eye, up);
 
         // Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // TODO: switch to modern OpenGL pipeline fully
-        GLfloat model[16]; 
-        glGetFloatv(GL_MODELVIEW_MATRIX, model);
-        GLfloat projection[16]; 
-        glGetFloatv(GL_PROJECTION_MATRIX, projection);
-
-        shader.sendUniform("modelview", model);
-        shader.sendUniform("projection", projection);
-
         shader.use();
+        shader.sendUniform("modelViewProjection", projection * view * model);
+        
         actualScene->draw();
 
         // Swap buffers

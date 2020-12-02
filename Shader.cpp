@@ -1,6 +1,5 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
-#include <GL/glu.h>
 
 #include "Shader.hpp"
 #include <iostream>
