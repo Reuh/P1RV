@@ -74,7 +74,7 @@ int main()
     while (window.isOpen())
     {
         // Process Input
-        sf::Event event;
+        sf::Event event{};
         while (window.pollEvent(event))
         {
             // TODO Send events to the scene

@@ -3,8 +3,10 @@
 //
 
 #include <iostream>
+#include <GL/gl.h>
 #include "Scene.h"
 #include "Renderer.h"
+#include "Transform.h"
 
 void Scene::addObject(GameObject *newObject) {
     objectList.push_back(newObject);
@@ -13,11 +15,14 @@ void Scene::addObject(GameObject *newObject) {
 void Scene::draw() {
     for (GameObject* object : objectList) {
         auto* renderer = object->getComponent<Renderer>();
-        if (renderer != nullptr)
+        if (renderer != nullptr) {
+            glPushMatrix();
+            object->getComponent<Transform>()->apply();
             renderer->render();
+            glPopMatrix();
+        }
     }
 }
-// TODO : Test for objects with a Renderer and without one
 
 void Scene::removeObject(GameObject *targetObject) {
     for (int i = 0; i < objectList.size(); i++) {

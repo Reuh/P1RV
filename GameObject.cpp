@@ -4,6 +4,12 @@
 
 #include "GameObject.h"
 
+unsigned GameObject::idCounter = 0;
+
 void GameObject::addComponent(Component* newComponent) {
     componentList.push_back(newComponent);
+}
+
+unsigned GameObject::getId() const {
+    return this->id;
 }

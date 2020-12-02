@@ -13,7 +13,7 @@
 using namespace glm;
 
 void TestScene::initialize() {
-    CubeRenderer* cr = new CubeRenderer();
+    auto* cr = new CubeRenderer();
     test = new GameObject();
     test->addComponent(cr);
     addObject(test);
