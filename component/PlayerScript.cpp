@@ -4,15 +4,15 @@
 #include <SFML/Window.hpp>
 
 #include "MatrixStack.hpp"
-#include "Player.hpp"
+#include "PlayerScript.hpp"
 #include "Collider.hpp"
 #include "Script.hpp"
 #include "GameObject.hpp"
-#include "Scene.hpp"
+#include "scene/Scene.hpp"
 
 #include <iostream>
 
-void Player::start() {
+void PlayerScript::start() {
 	// Initial camera setup
     setView(glm::lookAt(position, position+eye, up));
 
@@ -20,7 +20,7 @@ void Player::start() {
     mouseCenterPosition = sf::Mouse::getPosition();
 }
 
-void Player::update(float dt) {
+void PlayerScript::update(float dt) {
 	// Translation movement
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         position += right * speed*dt;
@@ -49,7 +49,7 @@ void Player::update(float dt) {
     setView(glm::lookAt(position, position+eye, up));
 }
 
-void Player::onWindowEvent(sf::Event event) {
+void PlayerScript::onWindowEvent(sf::Event event) {
 	if (event.type == sf::Event::MouseButtonPressed) {
 		// Fire
         if (event.mouseButton.button == sf::Mouse::Left) {

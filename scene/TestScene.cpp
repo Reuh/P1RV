@@ -3,12 +3,12 @@
 //
 
 #include "TestScene.hpp"
-#include "CubeRenderer.hpp"
-#include "ModelRenderer.hpp"
-#include "BoxCollider.hpp"
-#include "Transform.hpp"
-#include "Player.hpp"
-#include "TestEnemyIA.hpp"
+#include "component/CubeRenderer.hpp"
+#include "component/ModelRenderer.hpp"
+#include "component/BoxCollider.hpp"
+#include "component/Transform.hpp"
+#include "component/PlayerScript.hpp"
+#include "component/TestEnemyScript.hpp"
 
 #include <glm/glm.hpp>
 #include <iostream>
@@ -21,10 +21,10 @@ void TestScene::initialize() {
     transform->scale(vec3(0.5,0.5,0.5));
     model->addComponent(new ModelRenderer("models/cube/cube.gltf"));
     model->addComponent(new BoxCollider(vec3(-1,-1,-1), vec3(1,1,1))); // TODO: automatically calculate from model data
-    model->addComponent(new TestEnemyIA());
+    model->addComponent(new TestEnemyScript());
     addObject(model);
 
     auto player = new GameObject();
-    player->addComponent(new Player());
+    player->addComponent(new PlayerScript());
     addObject(player);
 }

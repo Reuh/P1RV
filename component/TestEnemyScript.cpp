@@ -1,12 +1,12 @@
-#include "TestEnemyIA.hpp"
+#include "TestEnemyScript.hpp"
 #include "Script.hpp"
 
 #include <iostream>
 
-void TestEnemyIA::update(float dt) {
+void TestEnemyScript::update(float dt) {
 	// update IA and stuff
 }
 
-void TestEnemyIA::onHit() {
+void TestEnemyScript::onHit() {
 	std::cout << "Touché!" << std::endl;
 }

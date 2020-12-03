@@ -1,11 +1,11 @@
-#ifndef P1RV_PLAYERCONTROLLER_H
-#define P1RV_PLAYERCONTROLLER_H
+#ifndef P1RV_PLAYERSCRIPT_H
+#define P1RV_PLAYERSCRIPT_H
 
 #include "Script.hpp"
 
 #include <glm/glm.hpp>
 
-class Player : public Script {
+class PlayerScript : public Script {
 private:
 	// Player position. TODO: merge with Transform
 	const glm::vec3 up = glm::vec3(0,1,0); // up axis, fixed

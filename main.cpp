@@ -3,13 +3,12 @@
 #include <GL/glew.h>
 #include <SFML/OpenGL.hpp>
 #include "GameObject.hpp"
-#include "Scene.hpp"
-#include "TestScene.hpp"
+#include "scene/Scene.hpp"
+#include "scene/TestScene.hpp"
 #include <SFML/System.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-#include "Collider.hpp"
 #include <algorithm>
 #include "Shader.hpp"
 #include "MatrixStack.hpp"

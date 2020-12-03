@@ -6,11 +6,11 @@
 #include <GL/gl.h>
 #include <SFML/Window.hpp>
 #include "Scene.hpp"
-#include "Renderer.hpp"
-#include "Transform.hpp"
+#include "component/Renderer.hpp"
+#include "component/Transform.hpp"
 #include "MatrixStack.hpp"
 #include "Shader.hpp"
-#include "Script.hpp"
+#include "component/Script.hpp"
 
 void Scene::addObject(GameObject *newObject) {
     newObject->scene = this;

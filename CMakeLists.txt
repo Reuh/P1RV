@@ -4,8 +4,12 @@ project(P1RV)
 set(CMAKE_CXX_STANDARD 14)
 
 file(GLOB SOURCES *.h *.cpp)
+file(GLOB COMPONENTS component/*.h component/*.cpp)
+file(GLOB SCENES scene/*.h scene/*.cpp)
 
-add_executable(P1RV ${SOURCES})
+add_executable(P1RV ${SOURCES} ${COMPONENTS} ${SCENES})
+
+target_include_directories(P1RV PRIVATE .)
 
 target_link_libraries(P1RV sfml-graphics sfml-system sfml-window GLU assimp GLEW)
 if (WIN32)

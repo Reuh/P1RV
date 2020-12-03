@@ -7,8 +7,8 @@
 
 
 #include <vector>
-#include "Component.hpp"
-#include "Transform.hpp"
+#include "component/Component.hpp"
+#include "component/Transform.hpp"
 
 class Scene; // forward declaration to avoid cycle with Scene.hpp
 
