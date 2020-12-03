@@ -7,6 +7,7 @@
 
 
 #include <vector>
+#include <SFML/Window.hpp>
 #include "GameObject.hpp"
 #include "Shader.hpp"
 
@@ -21,8 +22,8 @@ public:
     void removeObject(GameObject* targetObject);
     std::vector<GameObject*>* getObjectList();
     virtual void initialize() = 0;
-    virtual void input() = 0;
-    virtual void update() = 0;
+    void onWindowEvent(sf::Event event);
+    void update(float dt);
     // TODO To decouple the scope of rendering from this class, it would be better a function to return the list of objects to be rendered
     // It's also nice to use a fixed pointer that can be accessed only once
     void draw(Shader* shader);

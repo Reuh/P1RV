@@ -4,14 +4,24 @@
 
 #include <iostream>
 #include <GL/gl.h>
+#include <SFML/Window.hpp>
 #include "Scene.hpp"
 #include "Renderer.hpp"
 #include "Transform.hpp"
 #include "MatrixStack.hpp"
 #include "Shader.hpp"
+#include "Script.hpp"
 
 void Scene::addObject(GameObject *newObject) {
+    newObject->scene = this;
     objectList.push_back(newObject);
+
+    for (GameObject* object : objectList) {
+        auto* script = object->getComponent<Script>();
+        if (script != nullptr) {
+            script->start();
+        }
+    }
 }
 
 void Scene::draw(Shader* shader) {
@@ -20,17 +30,29 @@ void Scene::draw(Shader* shader) {
     for (GameObject* object : objectList) {
         auto* renderer = object->getComponent<Renderer>();
         if (renderer != nullptr) {
-            auto* transform = object->getComponent<Transform>();
-            if (transform != nullptr) {
-                pushMatrix();
-                object->getComponent<Transform>()->apply();
-                shader->sendUniform("modelViewProjection", getMVPMatrix());
-                renderer->render(shader);
-                popMatrix();
-            } else {
-                shader->sendUniform("modelViewProjection", getMVPMatrix());
-                renderer->render(shader);
-            }
+            pushMatrix();
+            object->getTransform()->apply();
+            shader->sendUniform("modelViewProjection", getMVPMatrix());
+            renderer->render(shader);
+            popMatrix();
+        }
+    }
+}
+
+void Scene::update(float dt) {
+    for (GameObject* object : objectList) {
+        auto* script = object->getComponent<Script>();
+        if (script != nullptr) {
+            script->update(dt);
+        }
+    }
+}
+
+void Scene::onWindowEvent(sf::Event event) {
+    for (GameObject* object : objectList) {
+        auto* script = object->getComponent<Script>();
+        if (script != nullptr) {
+            script->onWindowEvent(event);
         }
     }
 }

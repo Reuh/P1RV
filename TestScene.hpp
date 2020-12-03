@@ -13,8 +13,6 @@ private:
     GameObject* test;
 public:
     void initialize() override;
-    void input() override;
-    void update() override;
 };
 
 

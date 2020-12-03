@@ -14,3 +14,7 @@ void GameObject::addComponent(Component* newComponent) {
 unsigned GameObject::getId() const {
     return this->id;
 }
+
+Transform* GameObject::getTransform() {
+    return &(this->transform);
+}

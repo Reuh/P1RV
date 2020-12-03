@@ -19,17 +19,10 @@ public:
 	}
 
     bool collideRay(vec3 origin, vec3 dir) {
-    	// Apply Transform to box (probably wrong with rotations)
-    	vec3 lb2;
-    	vec3 rt2;
-    	Transform* tr = object->getComponent<Transform>();
-    	if (tr != nullptr) {
-    		lb2 = tr->getMatrix() * vec4(lb2, 1.f);
-    		rt2 = tr->getMatrix() * vec4(rt2, 1.f);
-    	} else {
-    		lb2 = lb;
-    		rt2 = rt;
-    	}
+    	// Apply Transform to box (FIXME: should probably ignore rotation)
+    	Transform* tr = object->getTransform();
+    	vec3 lb2 = tr->getMatrix() * vec4(lb, 1.f);
+    	vec3 rt2 = tr->getMatrix() * vec4(rt, 1.f);
 
     	// Test
     	vec3 dirfrac;

@@ -7,6 +7,8 @@
 #include "ModelRenderer.hpp"
 #include "BoxCollider.hpp"
 #include "Transform.hpp"
+#include "Player.hpp"
+#include "TestEnemyIA.hpp"
 
 #include <glm/glm.hpp>
 #include <iostream>
@@ -14,24 +16,15 @@
 using namespace glm;
 
 void TestScene::initialize() {
-    auto* cr = new CubeRenderer();
-    test = new GameObject();
-    test->addComponent(cr);
-    addObject(test);
-
     auto model = new GameObject();
-    model->addComponent(new ModelRenderer("models/cube/cube.gltf"));
-    model->addComponent(new BoxCollider(vec3(-1,-1,-1), vec3(1,1,1)));
-    Transform* transform = new Transform();
+    Transform* transform = model->getTransform();
     transform->scale(vec3(0.5,0.5,0.5));
-    model->addComponent(transform);
+    model->addComponent(new ModelRenderer("models/cube/cube.gltf"));
+    model->addComponent(new BoxCollider(vec3(-1,-1,-1), vec3(1,1,1))); // TODO: automatically calculate from model data
+    model->addComponent(new TestEnemyIA());
     addObject(model);
-}
 
-void TestScene::input() {
-
-}
-
-void TestScene::update() {
-
+    auto player = new GameObject();
+    player->addComponent(new Player());
+    addObject(player);
 }

@@ -3,7 +3,9 @@ project(P1RV)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(P1RV main.cpp CubeRenderer.cpp GameObject.cpp Scene.cpp TestScene.cpp MeshRenderer.cpp ModelRenderer.cpp Shader.cpp Transform.cpp MatrixStack.cpp)
+file(GLOB SOURCES *.h *.cpp)
+
+add_executable(P1RV ${SOURCES})
 
 target_link_libraries(P1RV sfml-graphics sfml-system sfml-window GLU assimp GLEW)
 if (WIN32)
