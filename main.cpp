@@ -1,15 +1,18 @@
+#include <windows.h>
 #include <iostream>
-#include <SFML/Graphics.hpp>
+#include <algorithm>
+
 #include <GL/glew.h>
 #include <SFML/OpenGL.hpp>
-#include "GameObject.hpp"
-#include "scene/Scene.hpp"
-#include "scene/TestScene.hpp"
 #include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-#include <algorithm>
+
+#include "GameObject.hpp"
+#include "scene/Scene.hpp"
+#include "scene/TestScene.hpp"
 #include "Shader.hpp"
 #include "MatrixStack.hpp"
 

@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include <GL/gl.h>
+#include <SFML/OpenGL.hpp>
 #include <SFML/Window.hpp>
 #include "Scene.hpp"
 #include "component/Renderer.hpp"

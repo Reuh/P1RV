@@ -2,7 +2,7 @@
 // Created by iagoc on 11/10/2020.
 //
 
-#include <GL/gl.h>
+#include <SFML/OpenGL.hpp>
 #include "CubeRenderer.hpp"
 #include "Shader.hpp"
 
