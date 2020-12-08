@@ -1,5 +1,6 @@
 #ifdef _WIN32
 #include <windows.h>
+#include <winuser.h>
 #endif
 
 #include <iostream>
@@ -22,6 +23,18 @@
 
 int main()
 {
+    #ifdef _WIN32
+    // Check keyboard type
+    WCHAR buf[KL_NAMELENGTH];
+    GetKeyboardLayoutName(reinterpret_cast<LPSTR>(buf));
+    std::cout << GetKeyboardLayout(0) << " : " << buf << std::endl;
+    // Keyboard BR (QWERTY) : 000000 0004160416
+    // Keyboard FR (AZERTY) : 000000 00040C040C
+    #endif
+
+    // Get game instance
+    Game *game = Game::getInstance();
+
     // Setup window
     sf::ContextSettings settings;
     settings.depthBits = 24;
