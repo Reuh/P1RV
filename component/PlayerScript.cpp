@@ -9,6 +9,7 @@
 #include "Script.hpp"
 #include "GameObject.hpp"
 #include "scene/Scene.hpp"
+#include "Game.hpp"
 
 #include <iostream>
 
@@ -34,7 +35,9 @@ void PlayerScript::update(float dt) {
     // Rotation movement
     sf::Vector2i newMousePosition = sf::Mouse::getPosition();
     sf::Vector2i diff = newMousePosition - mouseCenterPosition;
-    sf::Mouse::setPosition(mouseCenterPosition); // re-center mouse
+    Game *instance = Game::getInstance();
+    if (instance->getWindow()->hasFocus())
+        sf::Mouse::setPosition(mouseCenterPosition); // re-center mouse
     
     angleY += -diff.x * rotateSpeed * dt;
     angleX += -diff.y * rotateSpeed * dt;

@@ -18,6 +18,7 @@
 #include "scene/TestScene.hpp"
 #include "Shader.hpp"
 #include "MatrixStack.hpp"
+#include "component/Game.hpp"
 
 int main()
 {
@@ -29,14 +30,14 @@ int main()
     settings.majorVersion = 3;
     settings.minorVersion = 0;
 
-    sf::Window window(sf::VideoMode(800, 600), "Making the basic structure", sf::Style::Default, settings);
-    window.setVerticalSyncEnabled(true);
-    window.setMouseCursorVisible(false);
-    window.setMouseCursorGrabbed(true);
-    window.setActive(true);
+    sf::Window *window = game->newWindow(sf::VideoMode(800, 600), "P1RV - FPS", sf::Style::Default, settings);
+    window->setVerticalSyncEnabled(true);
+    window->setMouseCursorVisible(false);
+    window->setMouseCursorGrabbed(true);
+    window->setActive(true);
 
     // Center mouse
-    sf::Mouse::setPosition(sf::Vector2i(400, 300), window);
+    sf::Mouse::setPosition(sf::Vector2i(400, 300), *window);
 
     // Setup OpenGL
     glewInit();
@@ -57,17 +58,17 @@ int main()
     sf::Clock clock;
 
     // Game Loop
-    while (window.isOpen()) {
+    while (window->isOpen()) {
         // Process Input
         sf::Event event{};
-        while (window.pollEvent(event)) {
+        while (window->pollEvent(event)) {
             switch (event.type) {
                 case sf::Event::KeyPressed:
                     if (event.key.code == sf::Keyboard::Escape)
-                        window.close();
+                        window->close();
                     break;
                 case sf::Event::Closed:
-                    window.close();
+                    window->close();
                     break;
                 case sf::Event::Resized:
                     glViewport(0, 0, event.size.width, event.size.height);
@@ -91,7 +92,7 @@ int main()
         actualScene->draw(&shader);
 
         // Swap buffers
-        window.display();
+        window->display();
     }
 
     // Cleaning Up
