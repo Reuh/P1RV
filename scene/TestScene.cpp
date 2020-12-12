@@ -24,6 +24,12 @@ void TestScene::initialize() {
     model->addComponent(new TestEnemyScript());
     addObject(model);
 
+    auto maze = new GameObject();
+    maze->getTransform()->scale(vec3(1, 1, 1));
+    // TODO : Add a way to change model color from ModelRenderer properties
+    maze->addComponent(new ModelRenderer("models/labyrinth.obj"));
+    addObject(maze);
+
     auto player = new GameObject();
     player->addComponent(new PlayerScript());
     addObject(player);
