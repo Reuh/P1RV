@@ -4,7 +4,7 @@
 #include <string>
 #include "Shader.hpp"
 
-vector<Texture> textures_loaded; // global texture cache
+vector<Texture*> textures_loaded; // global texture cache
 
 ModelRenderer::ModelRenderer(string path) {
     Assimp::Importer import;
@@ -72,7 +72,7 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
             vertex.TexCoords = vec;
         }
         else
-            vertex.TexCoords = glm::vec2(-1.0f, -1.0f);
+            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 
         if(mesh->mColors[0])
             vertex.Color = glm::vec4(mesh->mColors[0]->r, mesh->mColors[0]->g, mesh->mColors[0]->b, mesh->mColors[0]->a);
@@ -93,11 +93,30 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
     if(mesh->mMaterialIndex >= 0)
     {
         aiMaterial *mat = scene->mMaterials[mesh->mMaterialIndex];
-        material.texture = loadMaterialTextures(mat, aiTextureType_DIFFUSE);
+        if (loadMaterialTextures(mat, aiTextureType_DIFFUSE, &material.textureDiffuse)) {
+            material.hasTexture = true;
+        } else {
+            material.hasTexture = false;
+            // no texture, use diffuse color
+            aiColor3D diffuseColor(1.f,1.f,1.f);
+            mat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
+            material.diffuseColor = glm::vec3(diffuseColor.r, diffuseColor.g, diffuseColor.b);
+        }
 
-        aiColor3D diffuseColor(1.f,1.f,1.f);
-        mat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
-        material.diffuseColor = glm::vec3(diffuseColor.r, diffuseColor.g, diffuseColor.b);
+        // load ambient color
+        aiColor3D ambientColor(1.f,1.f,1.f);
+        mat->Get(AI_MATKEY_COLOR_AMBIENT, ambientColor);
+        material.ambientColor = glm::vec3(ambientColor.r, ambientColor.g, ambientColor.b);
+
+        // load specular color
+        aiColor3D specularColor(1.f,1.f,1.f);
+        mat->Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
+        material.specularColor = glm::vec3(specularColor.r, specularColor.g, specularColor.b);
+
+        // load shininess
+        float shininess = 1.0f;
+        mat->Get(AI_MATKEY_SHININESS, shininess);
+        material.shininess = shininess;
     }
 
     MeshRenderer r = MeshRenderer(vertices, indices, material);
@@ -105,30 +124,29 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
     return r;
 }  
 
-Texture ModelRenderer::loadMaterialTextures(aiMaterial *mat, aiTextureType type)
+bool ModelRenderer::loadMaterialTextures(aiMaterial *mat, aiTextureType type, Texture* texture)
 {
-    Texture texture;
     for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
     {
         aiString str;
         mat->GetTexture(type, i, &str);
-        bool skip = false;
+        // check if texture has already been loaded
         for(unsigned int j = 0; j < textures_loaded.size(); j++)
         {
-            if(std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
+            if(std::strcmp(textures_loaded[j]->path.data(), str.C_Str()) == 0)
             {
-                return textures_loaded[j];
+                texture = textures_loaded[j];
+                return true;
             }
         }
-        if(!skip)
-        {   // if texture hasn't been loaded already, load it
-            texture.path = directory + '/' + string(str.C_Str());
-            if (!texture.tex.loadFromFile(texture.path)) {
-                std::cout << "ERROR: can't load texture " << texture.path << endl;
-            }
-            textures_loaded.push_back(texture); // add to loaded textures
-            break; // TODO: support multiples textures
+        // if texture hasn't been loaded already, load it
+        texture->path = directory + '/' + string(str.C_Str());
+        if (!texture->tex.loadFromFile(texture->path)) {
+            std::cout << "ERROR: can't load texture " << texture->path << endl;
+            return false;
         }
+        textures_loaded.push_back(texture); // add to loaded textures
+        return true; // TODO: support multiples textures
     }
-    return texture;
+    return false;
 }  

@@ -15,7 +15,7 @@
 
 void PlayerScript::start() {
 	// Initial camera setup
-    setView(glm::lookAt(position, position+eye, up));
+    setLookAt(position, position+eye, up);
 
     // mouse placed in center at game start
     mouseCenterPosition = sf::Mouse::getPosition();
@@ -49,7 +49,7 @@ void PlayerScript::update(float dt) {
     eye = glm::rotate(front, angleX, right);
 
     // Update camera
-    setView(glm::lookAt(position, position+eye, up));
+    setLookAt(position, position+eye, up);
 }
 
 void PlayerScript::onWindowEvent(sf::Event event) {

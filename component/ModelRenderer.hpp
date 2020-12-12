@@ -22,7 +22,7 @@ private:
 
     void processNode(aiNode *node, const aiScene *scene);
     MeshRenderer processMesh(aiMesh *mesh, const aiScene *scene);
-    Texture loadMaterialTextures(aiMaterial *mat, aiTextureType type);
+    bool loadMaterialTextures(aiMaterial *mat, aiTextureType type, Texture* texture);
 
 public:
 

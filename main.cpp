@@ -61,7 +61,7 @@ int main()
     Shader shader = Shader("shaders/vertex.glsl", "shaders/frag.glsl");
 
     // Mise en place de la perspective
-    setProjection(glm::perspective(glm::radians(60.0f), (float)800 / (float)600, 0.1f, 100.0f));
+    setPerspective(glm::radians(60.0f), (float)800 / (float)600, 0.1f, 100.0f);
 
     // Init scene
     Scene* actualScene = new TestScene();

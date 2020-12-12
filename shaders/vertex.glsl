@@ -6,12 +6,17 @@ layout (location = 3) in vec4 aColor;
 
 out vec2 TexCoords;
 out vec4 Color;
+out vec3 Normal;
+out vec3 FragPos;
 
-uniform mat4 modelViewProjection;
+uniform mat4 model;
+uniform mat4 viewProjection;
 
 void main()
 {
     TexCoords = aTexCoords;
     Color = aColor;
-    gl_Position = modelViewProjection * vec4(aPos, 1.0);
+    Normal = aNormal;
+    FragPos = vec3(model * vec4(aPos, 1.0));
+    gl_Position = viewProjection * vec4(FragPos, 1.0);
 }

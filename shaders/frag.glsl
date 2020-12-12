@@ -1,19 +1,57 @@
 #version 330 core
-out vec4 FragColor;
+out vec3 FragColor;
 
 in vec2 TexCoords;
-in vec4 Color;
+in vec4 Color; // vertex color
+in vec3 Normal; // normal in world space
+in vec3 FragPos; // position in world space
 
-uniform sampler2D textureDiffuse;
-uniform vec3 diffuseColor;
+struct Material {
+	bool hasTexture;
+	sampler2D textureDiffuse;
+	vec3 diffuseColor;
+
+	vec3 ambientColor;
+	vec3 specularColor;
+	float shininess;
+};
+
+struct DirectionalLight {
+	vec3 direction;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+};
+
+uniform Material material;
+uniform DirectionalLight light;
+uniform vec3 eyePos; // camera position in world space
 
 void main()
 {
-	vec4 baseColor;
-	if (TexCoords.x == -1)
-    	baseColor = vec4(1.0,1.0,1.0,1.0);
-    else
-    	baseColor = vec4(diffuseColor, 1.0);
+	vec3 diffuseColor;
+	if (!material.hasTexture)
+		diffuseColor = material.diffuseColor;
+	else
+		diffuseColor = vec3(texture(material.textureDiffuse, TexCoords));
 
-    FragColor = baseColor * Color;
+	// Calculate lightning //
+
+	vec3 normal = normalize(Normal);
+	vec3 viewDir = normalize(eyePos - FragPos);
+
+	// Directional lightning
+	vec3 lightDir = normalize(-light.direction);
+    // diffuse shading
+    float diff = max(dot(normal, lightDir), 0.0);
+    // specular shading
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    // combine results
+    vec3 ambient  = light.ambient  * diffuseColor;
+    vec3 diffuse  = light.diffuse  * diff * diffuseColor;
+    vec3 specular = light.specular * spec * material.specularColor;
+    FragColor = ambient + diffuse + specular;
+
+    // TODO: point lights
 }

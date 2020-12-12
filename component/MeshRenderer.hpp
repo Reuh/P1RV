@@ -23,8 +23,13 @@ struct Texture {
 };
 
 struct Material {
-    Texture texture;
+    bool hasTexture;
+    Texture textureDiffuse;
     glm::vec3 diffuseColor;
+
+    glm::vec3 ambientColor;
+    glm::vec3 specularColor;
+    float shininess;
 };
 
 class MeshRenderer : public Renderer {

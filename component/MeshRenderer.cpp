@@ -40,8 +40,12 @@ MeshRenderer::MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices
 
 void MeshRenderer::render(Shader* shader) {
     // bind texture & send material data
-    sf::Texture::bind(&material.texture.tex);
-    shader->sendUniform("diffuseColor", material.diffuseColor);
+    sf::Texture::bind(&material.textureDiffuse.tex);
+    shader->sendUniform("material.hasTexture", material.hasTexture);
+    shader->sendUniform("material.diffuseColor", material.diffuseColor);
+    shader->sendUniform("material.ambientColor", material.ambientColor);
+    shader->sendUniform("material.specularColor", material.specularColor);
+    shader->sendUniform("material.shininess", material.shininess);
 
     // draw mesh
     glBindVertexArray(VAO);

@@ -26,13 +26,20 @@ void Scene::addObject(GameObject *newObject) {
 
 void Scene::draw(Shader* shader) {
     shader->use();
+    shader->sendUniform("viewProjection", getViewProjectionMatrix());
+    shader->sendUniform("eyePos", getEye());
+
+    shader->sendUniform("light.direction", glm::vec3(1,-2,1));
+    shader->sendUniform("light.ambient", glm::vec3(0.1,0.1,0.1));
+    shader->sendUniform("light.diffuse", glm::vec3(1,1,1));
+    shader->sendUniform("light.specular", glm::vec3(1,1,1));
 
     for (GameObject* object : objectList) {
         auto* renderer = object->getComponent<Renderer>();
         if (renderer != nullptr) {
             pushMatrix();
             object->getTransform()->apply();
-            shader->sendUniform("modelViewProjection", getMVPMatrix());
+            shader->sendUniform("model", getModelMatrix());
             renderer->render(shader);
             popMatrix();
         }

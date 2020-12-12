@@ -4,20 +4,27 @@
 #include "MatrixStack.hpp"
 #include <glm/glm.hpp>
 #include <vector>
+#include <glm/gtc/matrix_transform.hpp>
 
 // Transformations matrixes
 glm::mat4 projection = glm::mat4(1.0f);
 glm::mat4 view = glm::mat4(1.0f);
 std::vector<glm::mat4> modelStack = { glm::mat4(1.f) };
 
-void setProjection(glm::mat4 matrix) {
-	projection = matrix;
+void setPerspective(float fov, float aspect, float near, float far) {
+	projection = glm::perspective(fov, aspect, near, far);
 }
 glm::mat4 getProjection() {
 	return projection;
 }
-void setView(glm::mat4 matrix) {
-	view = matrix;
+
+glm::vec3 eye(0,0,0);
+void setLookAt(const glm::vec3 eye_, const glm::vec3 center, const glm::vec3 up) {
+	eye = eye_;
+	view = glm::lookAt(eye_, center, up);
+}
+glm::vec3 getEye() {
+	return eye;
 }
 glm::mat4 getView() {
 	return view;
@@ -36,8 +43,8 @@ glm::mat4 getModelMatrix() {
 	return modelStack[modelStack.size()-1];
 }
 
-glm::mat4 getMVPMatrix() {
-	return getProjection() * getView() * getModelMatrix();
+glm::mat4 getViewProjectionMatrix() {
+	return getProjection() * getView();
 }
 
 #endif
