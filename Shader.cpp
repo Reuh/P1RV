@@ -80,3 +80,15 @@ void Shader::sendUniform(const char* name, const glm::mat4 matrix) const {
 void Shader::sendUniform(const char* name, const GLfloat matrix[14]) const {
     glUniformMatrix4fv(glGetUniformLocation(ID, name), 1, GL_FALSE, &matrix[0]);
 }
+
+void Shader::sendUniform(const char* name, const glm::vec3 vec) const {
+    glUniform3fv(glGetUniformLocation(ID, name), 1, &vec[0]);
+}
+
+void Shader::sendUniform(const char* name, const glm::vec4 vec) const {
+    glUniform3fv(glGetUniformLocation(ID, name), 1, &vec[0]);
+}
+
+void Shader::sendUniform(const char* name, const float val) const {
+    glUniform1f(glGetUniformLocation(ID, name), val);
+}

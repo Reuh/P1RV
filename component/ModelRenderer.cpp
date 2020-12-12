@@ -44,7 +44,7 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
 {
     vector<Vertex> vertices;
     vector<unsigned int> indices;
-    Texture texture;
+    Material material;
 
     for(unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
@@ -72,9 +72,12 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
             vertex.TexCoords = vec;
         }
         else
-            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+            vertex.TexCoords = glm::vec2(-1.0f, -1.0f);
 
-        vertex.Color = glm::vec4(1.f, 1.f, 1.f, 1.f); // TODO: extract value from model to support untextured faces
+        if(mesh->mColors[0])
+            vertex.Color = glm::vec4(mesh->mColors[0]->r, mesh->mColors[0]->g, mesh->mColors[0]->b, mesh->mColors[0]->a);
+        else
+            vertex.Color = glm::vec4(1.f, 1.f, 1.f, 1.f);
         
         vertices.push_back(vertex);
     }
@@ -89,11 +92,15 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
     // process material
     if(mesh->mMaterialIndex >= 0)
     {
-        aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-        texture = loadMaterialTextures(material, aiTextureType_DIFFUSE);
+        aiMaterial *mat = scene->mMaterials[mesh->mMaterialIndex];
+        material.texture = loadMaterialTextures(mat, aiTextureType_DIFFUSE);
+
+        aiColor3D diffuseColor(1.f,1.f,1.f);
+        mat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
+        material.diffuseColor = glm::vec3(diffuseColor.r, diffuseColor.g, diffuseColor.b);
     }
 
-    MeshRenderer r = MeshRenderer(vertices, indices, texture);
+    MeshRenderer r = MeshRenderer(vertices, indices, material);
 
     return r;
 }  

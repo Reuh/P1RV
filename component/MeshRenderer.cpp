@@ -4,10 +4,10 @@
 
 #include <iostream>
 
-MeshRenderer::MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices, Texture texture) {
+MeshRenderer::MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices, Material material) {
     this->vertices = vertices;
     this->indices = indices;
-    this->texture = texture;
+    this->material = material;
 
     // setup mesh
     glGenVertexArrays(1, &VAO);
@@ -39,8 +39,9 @@ MeshRenderer::MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices
 }
 
 void MeshRenderer::render(Shader* shader) {
-    // bind texture
-    sf::Texture::bind(&texture.tex);
+    // bind texture & send material data
+    sf::Texture::bind(&material.texture.tex);
+    shader->sendUniform("diffuseColor", material.diffuseColor);
 
     // draw mesh
     glBindVertexArray(VAO);

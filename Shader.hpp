@@ -20,6 +20,11 @@ public:
 	// Send uniforms to the shader.
 	void sendUniform(const char* name, const glm::mat4 matrix) const;
 	void sendUniform(const char* name, const GLfloat matrix[14]) const;
+
+	void sendUniform(const char* name, const glm::vec3 vec) const;
+	void sendUniform(const char* name, const glm::vec4 vec) const;
+
+	void sendUniform(const char* name, const float val) const;
 };
 
 #endif

@@ -22,6 +22,11 @@ struct Texture {
     string path;
 };
 
+struct Material {
+    Texture texture;
+    glm::vec3 diffuseColor;
+};
+
 class MeshRenderer : public Renderer {
 private:
 	//  render data
@@ -31,9 +36,9 @@ public:
 	// mesh data
     vector<Vertex>       vertices;
     vector<unsigned int> indices;
-    Texture              texture;
+    Material             material;
 
-    MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices, Texture texture);
+    MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices, Material material);
 
     void render(Shader* shader) override;
 };
