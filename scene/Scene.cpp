@@ -29,8 +29,8 @@ void Scene::draw(Shader* shader) {
     shader->sendUniform("viewProjection", getViewProjectionMatrix());
     shader->sendUniform("eyePos", getEye());
 
-    shader->sendUniform("light.direction", glm::vec3(1,-2,1));
-    shader->sendUniform("light.ambient", glm::vec3(0.1,0.1,0.1));
+    shader->sendUniform("light.direction", glm::vec3(2,-3,1));
+    shader->sendUniform("light.ambient", glm::vec3(0.2,0.2,0.2));
     shader->sendUniform("light.diffuse", glm::vec3(1,1,1));
     shader->sendUniform("light.specular", glm::vec3(1,1,1));
 
