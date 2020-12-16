@@ -57,9 +57,9 @@ void PlayerScript::onWindowEvent(sf::Event event) {
 		// Fire
         if (event.mouseButton.button == sf::Mouse::Left) {
             auto objList = object->scene->getObjectList();
-            for(auto iter = objList->begin() ; iter != objList->end(); ++iter) {
-                Collider* coll = (*iter)->getComponent<Collider>();
-                Script* script = (*iter)->getComponent<Script>();
+            for(auto & iter : *objList) {
+                auto * coll = iter->getComponent<Collider>();
+                auto * script = iter->getComponent<Script>();
                 if (coll != nullptr && script != nullptr && coll->collideRay(position, eye)) {
                    script->onHit();
                 }
