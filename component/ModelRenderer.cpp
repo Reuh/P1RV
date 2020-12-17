@@ -45,7 +45,7 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
 {
     vector<Vertex> vertices;
     vector<unsigned int> indices;
-    Material material;
+    Material* material = new Material();
 
     for(unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
@@ -95,33 +95,33 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
     if(mesh->mMaterialIndex >= 0)
     {
         aiMaterial *mat = scene->mMaterials[mesh->mMaterialIndex];
-        if (loadMaterialTextures(mat, aiTextureType_DIFFUSE, &material.textureDiffuse)) {
-            material.hasTexture = true;
+        if (loadMaterialTextures(mat, aiTextureType_DIFFUSE, &material->textureDiffuse)) {
+            material->hasTexture = true;
         } else {
-            material.hasTexture = false;
+            material->hasTexture = false;
             // no texture, use diffuse color
             aiColor3D diffuseColor(1.f,1.f,1.f);
             mat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
-            material.diffuseColor = glm::vec3(diffuseColor.r, diffuseColor.g, diffuseColor.b);
+            material->diffuseColor = glm::vec3(diffuseColor.r, diffuseColor.g, diffuseColor.b);
         }
 
         // load ambient color
         aiColor3D ambientColor(1.f,1.f,1.f);
         mat->Get(AI_MATKEY_COLOR_AMBIENT, ambientColor);
-        material.ambientColor = glm::vec3(ambientColor.r, ambientColor.g, ambientColor.b);
+        material->ambientColor = glm::vec3(ambientColor.r, ambientColor.g, ambientColor.b);
 
         // load specular color
         aiColor3D specularColor(1.f,1.f,1.f);
         mat->Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
-        material.specularColor = glm::vec3(specularColor.r, specularColor.g, specularColor.b);
+        material->specularColor = glm::vec3(specularColor.r, specularColor.g, specularColor.b);
 
         // load shininess
         float shininess = 1.0f;
         mat->Get(AI_MATKEY_SHININESS, shininess);
-        material.shininess = shininess;
+        material->shininess = shininess;
     }
 
-    MeshRenderer r = MeshRenderer(vertices, indices, material);
+    MeshRenderer r = MeshRenderer(vertices, indices, *material);
 
     return r;
 }  
