@@ -26,6 +26,7 @@ struct DirectionalLight {
 uniform Material material;
 uniform DirectionalLight light;
 uniform vec3 eyePos; // camera position in world space
+uniform bool hasLightning;
 
 void main()
 {
@@ -36,22 +37,25 @@ void main()
 		diffuseColor = vec3(texture(material.textureDiffuse, TexCoords));
 
 	// Calculate lightning //
+	if (hasLightning) {
+		vec3 normal = normalize(Normal);
+		vec3 viewDir = normalize(eyePos - FragPos);
 
-	vec3 normal = normalize(Normal);
-	vec3 viewDir = normalize(eyePos - FragPos);
+		// Directional lightning
+		vec3 lightDir = normalize(-light.direction);
+	    // diffuse shading
+	    float diff = max(dot(normal, lightDir), 0.0);
+	    // specular shading
+	    vec3 reflectDir = reflect(-lightDir, normal);
+	    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+	    // combine results
+	    vec3 ambient  = light.ambient  * diffuseColor;
+	    vec3 diffuse  = light.diffuse  * diff * diffuseColor;
+	    vec3 specular = light.specular * spec * material.specularColor;
+	    FragColor = ambient + diffuse + specular;
 
-	// Directional lightning
-	vec3 lightDir = normalize(-light.direction);
-    // diffuse shading
-    float diff = max(dot(normal, lightDir), 0.0);
-    // specular shading
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    // combine results
-    vec3 ambient  = light.ambient  * diffuseColor;
-    vec3 diffuse  = light.diffuse  * diff * diffuseColor;
-    vec3 specular = light.specular * spec * material.specularColor;
-    FragColor = ambient + diffuse + specular;
-
-    // TODO: point lights
+	    // TODO: point lights
+	} else {
+		FragColor = diffuseColor;
+	}
 }

@@ -10,7 +10,12 @@
 #include "Shader.hpp"
 
 class Renderer : public Component {
+private:
+	bool lightning = true;
 public:
+	void setLightning(bool l) { lightning = l; };
+	bool getLightning() { return lightning; };
+
     // TODO Make it static and build an interface to pass the parameters from a reference to the object
     virtual void render(Shader* shader) = 0;
 };

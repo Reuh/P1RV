@@ -3,7 +3,6 @@
 //
 
 #include "TestScene.hpp"
-#include "component/CubeRenderer.hpp"
 #include "component/ModelRenderer.hpp"
 #include "component/BoxCollider.hpp"
 #include "component/Transform.hpp"
@@ -35,4 +34,11 @@ void TestScene::initialize() {
     player->addComponent(new BoxCollider(vec3(-.2,0,-.2), vec3(.2,.7,.2)));
     player->getTransform()->setPosition(glm::vec3(-2,0,0));
     addObject(player);
+
+    auto skybox = new GameObject();
+    skybox->getTransform()->scale(glm::vec3(50,50,50));
+    auto skyboxModel = new ModelRenderer("models/skybox.obj");
+    skyboxModel->setLightning(false);
+    skybox->addComponent(skyboxModel);
+    addObject(skybox);
 }

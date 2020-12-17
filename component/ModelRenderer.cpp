@@ -21,6 +21,7 @@ ModelRenderer::ModelRenderer(string path) {
 }
 
 void ModelRenderer::render(Shader* shader) {
+    shader->sendUniform("hasLightning", getLightning());
     for(unsigned int i = 0; i < meshes.size(); i++)
         meshes[i].render(shader);
 }
@@ -134,7 +135,7 @@ bool ModelRenderer::loadMaterialTextures(aiMaterial *mat, aiTextureType type, Te
         // check if texture has already been loaded
         for(unsigned int j = 0; j < textures_loaded.size(); j++)
         {
-            if(std::strcmp(textures_loaded[j]->path.data(), str.C_Str()) == 0)
+            if(textures_loaded[j]->path.compare(directory + '/' + string(str.C_Str())) == 0)
             {
                 texture = textures_loaded[j];
                 return true;
