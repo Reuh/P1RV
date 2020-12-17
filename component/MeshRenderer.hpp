@@ -39,9 +39,9 @@ private:
 
 public:
 	// mesh data
-    vector<Vertex>       vertices;
-    vector<unsigned int> indices;
-    Material             material;
+    vector<Vertex>       vertices; // vertex list
+    vector<unsigned int> indices; // vertex indice draw order
+    Material             material; // mesh material
 
     MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices, Material material);
 

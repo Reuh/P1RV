@@ -34,21 +34,22 @@ void PlayerScript::start() {
     EventHandler::addAction("down", [this](auto && PH1) { downKey(std::forward<decltype(PH1)>(PH1)); });
 
     // Register bindings
+    long long x = 0;
     #ifdef _WIN32
         // Check keyboard type
-        long long x = (long long) GetKeyboardLayout(0) & 0x0000FFFF;
-        if (x == 1046) { // QWERTY
-            EventHandler::setBinding(sf::Keyboard::W, "up");
-            EventHandler::setBinding(sf::Keyboard::S, "down");
-            EventHandler::setBinding(sf::Keyboard::A, "left");
-            EventHandler::setBinding(sf::Keyboard::D, "right");
-        } else { // AZERTY
-            EventHandler::setBinding(sf::Keyboard::Z, "up");
-            EventHandler::setBinding(sf::Keyboard::S, "down");
-            EventHandler::setBinding(sf::Keyboard::A, "left");
-            EventHandler::setBinding(sf::Keyboard::D, "right");
-        }
+        x = (long long) GetKeyboardLayout(0) & 0x0000FFFF;
     #endif
+    if (x == 1046) { // QWERTY
+        EventHandler::setBinding(sf::Keyboard::W, "up");
+        EventHandler::setBinding(sf::Keyboard::S, "down");
+        EventHandler::setBinding(sf::Keyboard::A, "left");
+        EventHandler::setBinding(sf::Keyboard::D, "right");
+    } else { // AZERTY
+        EventHandler::setBinding(sf::Keyboard::Z, "up");
+        EventHandler::setBinding(sf::Keyboard::S, "down");
+        EventHandler::setBinding(sf::Keyboard::Q, "left");
+        EventHandler::setBinding(sf::Keyboard::D, "right");
+    }
 }
 
 void PlayerScript::update(float dt) {

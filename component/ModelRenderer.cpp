@@ -81,6 +81,7 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
         
         vertices.push_back(vertex);
     }
+
     // process indices
     for(unsigned int i = 0; i < mesh->mNumFaces; i++)
     {
@@ -146,7 +147,7 @@ bool ModelRenderer::loadMaterialTextures(aiMaterial *mat, aiTextureType type, Te
             return false;
         }
         textures_loaded.push_back(texture); // add to loaded textures
-        return true; // TODO: support multiples textures
+        return true; // TODO: support multiples textures (specular, normal...)
     }
     return false;
 }  
