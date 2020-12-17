@@ -1,6 +1,5 @@
 #ifdef _WIN32
 #include <windows.h>
-#include <winuser.h>
 #endif
 
 #include <iostream>
@@ -13,6 +12,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
+#include <component/EventHandler.hpp>
 
 #include "GameObject.hpp"
 #include "scene/Scene.hpp"
@@ -23,15 +23,6 @@
 
 int main()
 {
-    #ifdef _WIN32
-    // Check keyboard type
-    WCHAR buf[KL_NAMELENGTH];
-    GetKeyboardLayoutName(reinterpret_cast<LPSTR>(buf));
-    std::cout << GetKeyboardLayout(0) << " : " << buf << std::endl;
-    // Keyboard BR (QWERTY) : 000000 0004160416
-    // Keyboard FR (AZERTY) : 000000 00040C040C
-    #endif
-
     // Get game instance
     Game *game = Game::getInstance();
 
@@ -79,6 +70,11 @@ int main()
                 case sf::Event::KeyPressed:
                     if (event.key.code == sf::Keyboard::Escape)
                         window->close();
+                    else
+                        EventHandler::processEvent(event.key.code, event.type);
+                    break;
+                case sf::Event::KeyReleased:
+                    EventHandler::processEvent(event.key.code, event.type);
                     break;
                 case sf::Event::Closed:
                     window->close();
