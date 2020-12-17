@@ -27,6 +27,13 @@ Transform::Transform() {
     this->vScale = glm::vec3(1,1,1);
 }
 
+glm::vec3 Transform::getPosition() {
+	return vPosition;
+}
+void Transform::setPosition(glm::vec3 pos) {
+	vPosition = pos;
+}
+
 void Transform::translate(glm::vec3 vec) {
 	vPosition += vec;
 }

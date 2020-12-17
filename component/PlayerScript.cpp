@@ -10,11 +10,13 @@
 #include "GameObject.hpp"
 #include "scene/Scene.hpp"
 #include "Game.hpp"
+#include "BoxCollider.hpp"
 
 #include <iostream>
 
 void PlayerScript::start() {
 	// Initial camera setup
+    glm::vec3 position = object->getTransform()->getPosition();
     setLookAt(position, position+eye, up);
 
     // mouse placed in center at game start
@@ -23,6 +25,8 @@ void PlayerScript::start() {
 
 void PlayerScript::update(float dt) {
 	// Translation movement
+    glm::vec3 position = object->getTransform()->getPosition();
+    glm::vec3 oldPosition = position;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         position += right * speed*dt;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
@@ -31,6 +35,22 @@ void PlayerScript::update(float dt) {
         position += front * speed*dt;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         position -= front * speed*dt;
+    object->getTransform()->setPosition(position);
+
+    // Cancel transflation if collision (TODO: proper collision resolution)
+    auto boxcollider = object->getComponent<BoxCollider>();
+    if (boxcollider != nullptr) {
+        auto objList = object->scene->getObjectList();
+        for(auto iter = objList->begin() ; iter != objList->end(); ++iter) {
+            if (*iter != object) {
+                Collider* coll = (*iter)->getComponent<Collider>();
+                if (coll != nullptr && coll->collideBox(boxcollider)) {
+                   object->getTransform()->setPosition(oldPosition);
+                   position = oldPosition;
+                }
+            }
+        }
+    }
 
     // Rotation movement
     sf::Vector2i newMousePosition = sf::Mouse::getPosition();
@@ -56,12 +76,15 @@ void PlayerScript::onWindowEvent(sf::Event event) {
 	if (event.type == sf::Event::MouseButtonPressed) {
 		// Fire
         if (event.mouseButton.button == sf::Mouse::Left) {
+            glm::vec3 position = object->getTransform()->getPosition();
             auto objList = object->scene->getObjectList();
             for(auto iter = objList->begin() ; iter != objList->end(); ++iter) {
-                Collider* coll = (*iter)->getComponent<Collider>();
-                Script* script = (*iter)->getComponent<Script>();
-                if (coll != nullptr && script != nullptr && coll->collideRay(position, eye)) {
-                   script->onHit();
+                if (*iter != object) {
+                    Collider* coll = (*iter)->getComponent<Collider>();
+                    Script* script = (*iter)->getComponent<Script>();
+                    if (coll != nullptr && script != nullptr && coll->collideRay(position, eye)) {
+                       script->onHit();
+                    }
                 }
             }
         }

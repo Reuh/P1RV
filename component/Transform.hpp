@@ -18,6 +18,9 @@ private:
 public:
     Transform();
 
+    glm::vec3 getPosition();
+    void setPosition(glm::vec3 pos);
+
     void translate(glm::vec3 vec);
     void scale(glm::vec3 vec);
 

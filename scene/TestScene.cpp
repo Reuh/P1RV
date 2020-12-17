@@ -32,5 +32,7 @@ void TestScene::initialize() {
 
     auto player = new GameObject();
     player->addComponent(new PlayerScript());
+    player->addComponent(new BoxCollider(vec3(-.2,0,-.2), vec3(.2,.7,.2)));
+    player->getTransform()->setPosition(glm::vec3(-2,0,0));
     addObject(player);
 }

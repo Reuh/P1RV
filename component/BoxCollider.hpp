@@ -13,8 +13,19 @@ protected:
 public:
 	BoxCollider(vec3 lb, vec3 rt);
 
+	vec3 getLb();
+	vec3 getRt();
+
+	vec3 getTransformedLb();
+	vec3 getTransformedRt();
+
 	// Test if ray originating from origing along dir collides with this box.
-    bool collideRay(vec3 origin, vec3 dir) override;
+	// Apply parent transformation.
+    virtual bool collideRay(vec3 origin, vec3 dir) override;
+
+    // Test if collides with another box
+    // Apply parent transformation.
+    virtual bool collideBox(BoxCollider* box) override;
 };
 
 #endif //P1RV_BOXCOLLIDER_H
