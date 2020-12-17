@@ -23,7 +23,8 @@ bool EventHandler::setBinding(sf::Keyboard::Key key, const std::string& actionNa
 }
 
 void EventHandler::processEvent(sf::Keyboard::Key key, sf::Event::EventType event) {
-    bindings[key](event);
+    if (bindings[key] != nullptr)
+        bindings[key](event);
 }
 
 void EventHandler::clearBindings() {
