@@ -15,6 +15,8 @@
 class Scene {
 private:
     std::vector<GameObject*> objectList;
+    // TODO Create a rendering tree so that objects can be made relative to other objects
+    // TODO Keep a separate reference to camera objects
 public:
     void addObject(GameObject* newObject);
     // GameObject* find(); // TODO after adding identifier
