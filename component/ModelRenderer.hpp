@@ -31,7 +31,7 @@ private:
 
 public:
 
-    ModelRenderer(string path);
+    ModelRenderer(const string& path);
 
     void render(Shader* shader) override;
 };

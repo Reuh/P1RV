@@ -6,7 +6,7 @@
 
 vector<Texture*> textures_loaded; // global texture cache
 
-ModelRenderer::ModelRenderer(string path) {
+ModelRenderer::ModelRenderer(const string& path) {
     Assimp::Importer import;
     const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
     
@@ -22,8 +22,8 @@ ModelRenderer::ModelRenderer(string path) {
 
 void ModelRenderer::render(Shader* shader) {
     shader->sendUniform("hasLightning", getLightning());
-    for(unsigned int i = 0; i < meshes.size(); i++)
-        meshes[i].render(shader);
+    for(auto & meshe : meshes)
+        meshe.render(shader);
 }
 
 void ModelRenderer::processNode(aiNode *node, const aiScene *scene)
@@ -45,11 +45,11 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
 {
     vector<Vertex> vertices;
     vector<unsigned int> indices;
-    Material* material = new Material();
+    auto* material = new Material();
 
     for(unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
-        Vertex vertex;
+        Vertex vertex{};
         // process vertex positions, normals and texture coordinates
         glm::vec3 vector; 
         vector.x = mesh->mVertices[i].x;
@@ -133,11 +133,11 @@ bool ModelRenderer::loadMaterialTextures(aiMaterial *mat, aiTextureType type, Te
         aiString str;
         mat->GetTexture(type, i, &str);
         // check if texture has already been loaded
-        for(unsigned int j = 0; j < textures_loaded.size(); j++)
+        for(auto & j : textures_loaded)
         {
-            if(textures_loaded[j]->path.compare(directory + '/' + string(str.C_Str())) == 0)
+            if(j->path == (directory + '/' + string(str.C_Str())))
             {
-                texture = textures_loaded[j];
+                texture = j;
                 return true;
             }
         }
