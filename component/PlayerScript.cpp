@@ -44,7 +44,7 @@ void PlayerScript::start() {
         EventHandler::setBinding(sf::Keyboard::S, "down");
         EventHandler::setBinding(sf::Keyboard::A, "left");
         EventHandler::setBinding(sf::Keyboard::D, "right");
-    } else { // AZERTY
+    } else { // AZERTY or linux
         EventHandler::setBinding(sf::Keyboard::Z, "up");
         EventHandler::setBinding(sf::Keyboard::S, "down");
         EventHandler::setBinding(sf::Keyboard::Q, "left");
@@ -66,13 +66,13 @@ void PlayerScript::update(float dt) {
         position -= front * speed*dt;
     object->getTransform()->setPosition(position);
 
-    // Cancel transflation if collision (TODO: proper collision resolution)
+    // Cancel translation if collided (TODO: proper collision resolution)
     auto boxcollider = object->getComponent<BoxCollider>();
     if (boxcollider != nullptr) {
         auto objList = object->scene->getObjectList();
-        for(auto iter = objList->begin() ; iter != objList->end(); ++iter) {
-            if (*iter != object) {
-                Collider* coll = (*iter)->getComponent<Collider>();
+        for(auto & iter : *objList) {
+            if (iter != object) {
+                auto coll = iter->getComponent<Collider>();
                 if (coll != nullptr && coll->collideBox(boxcollider)) {
                    object->getTransform()->setPosition(oldPosition);
                    position = oldPosition;
@@ -107,10 +107,10 @@ void PlayerScript::onWindowEvent(sf::Event event) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             glm::vec3 position = object->getTransform()->getPosition();
             auto objList = object->scene->getObjectList();
-            for(auto iter = objList->begin() ; iter != objList->end(); ++iter) {
-                if (*iter != object) {
-                    auto* coll = (*iter)->getComponent<Collider>();
-                    auto* script = (*iter)->getComponent<Script>();
+            for(auto & iter : *objList) {
+                if (iter != object) {
+                    auto coll = iter->getComponent<Collider>();
+                    auto script = iter->getComponent<Script>();
                     if (coll != nullptr && script != nullptr && coll->collideRay(position, eye)) {
                        script->onHit();
                     }
