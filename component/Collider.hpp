@@ -8,7 +8,16 @@
 class BoxCollider;
 
 class Collider : public Component {
+private:
+    bool rigid;
 public:
+    // TODO : Use only one collide function with different signatures
+    explicit Collider(bool _rigid) {
+        this->rigid = _rigid;
+    }
+    bool isRigid() const {
+        return this->rigid;
+    }
     virtual bool collideRay(glm::vec3 origin, glm::vec3 dir) = 0;
     virtual bool collideBox(BoxCollider* box) = 0;
 };

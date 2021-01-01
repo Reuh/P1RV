@@ -11,7 +11,7 @@ protected:
 	vec3 lb; // left-bottom corner (minimal coordinates)
 	vec3 rt; // right-top corner (maximal coordinates)
 public:
-	BoxCollider(vec3 lb, vec3 rt);
+	BoxCollider(bool _rigid, vec3 lb, vec3 rt);
 
 	vec3 getLb();
 	vec3 getRt();

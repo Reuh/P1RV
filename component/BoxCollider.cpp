@@ -6,7 +6,7 @@
 
 using namespace glm;
 
-BoxCollider::BoxCollider(vec3 lb, vec3 rt) {
+BoxCollider::BoxCollider(bool _rigid, vec3 lb, vec3 rt) : Collider(_rigid) {
 	this->lb = lb;
 	this->rt = rt;
 }
