@@ -1,3 +1,4 @@
+#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
@@ -12,8 +13,6 @@
 #include "Game.hpp"
 #include "EventHandler.hpp"
 #include "BoxCollider.hpp"
-
-#include <iostream>
 
 #ifdef _WIN32
 #include <winuser.h>
@@ -59,6 +58,7 @@ void PlayerScript::update(float dt) {
 	// Translation movement
     glm::vec3 position = object->getTransform()->getPosition();
     glm::vec3 oldPosition = position;
+    // TODO : Fix speed attribution so it's constant in all directions
     if (sRight)
         position += right * speed*dt;
     if (sLeft)
@@ -69,12 +69,14 @@ void PlayerScript::update(float dt) {
         position -= front * speed*dt;
     object->getTransform()->setPosition(position);
 
-    // Cancel translation if collided (TODO: proper collision resolution)
+    // Cancel translation if collided
+    // TODO: physics based collision
     auto boxcollider = object->getComponent<BoxCollider>();
     if (boxcollider != nullptr) {
         auto objList = object->scene->getObjectList();
         for(auto & iter : *objList) {
             if (iter != object) {
+                // TODO: Expand to multiple colliders
                 auto coll = iter->getComponent<Collider>();
                 if (coll != nullptr && coll->isRigid() && coll->collideBox(boxcollider)) {
                    object->getTransform()->setPosition(oldPosition);
