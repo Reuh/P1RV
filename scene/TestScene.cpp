@@ -7,6 +7,7 @@
 #include "component/BoxCollider.hpp"
 #include "component/Transform.hpp"
 #include "component/PlayerScript.hpp"
+#include "component/RelicScript.hpp"
 #include "component/TestEnemyScript.hpp"
 
 #include <glm/glm.hpp>
@@ -19,7 +20,7 @@ void TestScene::initialize() {
     Transform* transform = model->getTransform();
     transform->scale(vec3(0.5,0.5,0.5));
     model->addComponent(new ModelRenderer("models/cube/cube.gltf"));
-    model->addComponent(new BoxCollider(vec3(-1,-1,-1), vec3(1,1,1))); // TODO: automatically calculate from model data
+    model->addComponent(new BoxCollider(true, vec3(-1,-1,-1), vec3(1,1,1))); // TODO: automatically calculate from model data
     model->addComponent(new TestEnemyScript());
     addObject(model);
 
@@ -31,7 +32,7 @@ void TestScene::initialize() {
 
     auto player = new GameObject();
     player->addComponent(new PlayerScript());
-    player->addComponent(new BoxCollider(vec3(-.2,0,-.2), vec3(.2,.7,.2)));
+    player->addComponent(new BoxCollider(true, vec3(-.2,0,-.2), vec3(.2,.7,.2)));
     player->getTransform()->setPosition(glm::vec3(-2,0,0));
     addObject(player);
 
@@ -41,4 +42,11 @@ void TestScene::initialize() {
     skyboxModel->setLightning(false);
     skybox->addComponent(skyboxModel);
     addObject(skybox);
+
+    auto relic = new GameObject();
+    relic->addComponent(new ModelRenderer("models/Relic.obj"));
+    relic->getTransform()->setPosition(glm::vec3(2, -0.5, 0));
+    relic->getTransform()->scale(glm::vec3(0.25, 0.25, 0.25));
+    relic->addComponent(new RelicScript(relic, player));
+    addObject(relic);
 }
