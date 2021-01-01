@@ -76,9 +76,10 @@ void PlayerScript::update(float dt) {
         for(auto & iter : *objList) {
             if (iter != object) {
                 auto coll = iter->getComponent<Collider>();
-                if (coll != nullptr && coll->collideBox(boxcollider)) {
+                if (coll != nullptr && coll->isRigid() && coll->collideBox(boxcollider)) {
                    object->getTransform()->setPosition(oldPosition);
                    position = oldPosition;
+                   break;
                 }
             }
         }
