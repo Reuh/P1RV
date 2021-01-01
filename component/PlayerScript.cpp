@@ -88,20 +88,21 @@ void PlayerScript::update(float dt) {
     sf::Vector2i newMousePosition = sf::Mouse::getPosition();
     sf::Vector2i diff = newMousePosition - mouseCenterPosition;
     Game *instance = Game::getInstance();
-    if (instance->getWindow()->hasFocus())
+    if (instance->getWindow()->hasFocus()) {
         sf::Mouse::setPosition(mouseCenterPosition); // re-center mouse
-    
-    angleY += -diff.x * rotateSpeed * dt;
-    angleX += -diff.y * rotateSpeed * dt;
-    angleX = std::min(std::max(angleX, -3.14f/2), 3.14f/2); // prevent infinite rotation on x axis
 
-    // Update position vectors
-    front = glm::rotate(glm::vec3(1,0,0), angleY, up);
-    right = glm::cross(front, up);
-    eye = glm::rotate(front, angleX, right);
+        angleY += -diff.x * rotateSpeed * dt;
+        angleX += -diff.y * rotateSpeed * dt;
+        angleX = std::min(std::max(angleX, -3.14f/2), 3.14f/2); // prevent infinite rotation on x axis
 
-    // Update camera
-    setLookAt(position, position+eye, up);
+        // Update position vectors
+        front = glm::rotate(glm::vec3(1,0,0), angleY, up);
+        right = glm::cross(front, up);
+        eye = glm::rotate(front, angleX, right);
+
+        // Update camera
+        setLookAt(position, position+eye, up);
+    }
 }
 
 void PlayerScript::onWindowEvent(sf::Event event) {
