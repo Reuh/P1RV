@@ -25,7 +25,10 @@ void PlayerScript::start() {
     setLookAt(position, position+eye, up);
 
     // mouse placed in center at game start
-    mouseCenterPosition = sf::Mouse::getPosition();
+    // mouseCenterPosition = sf::Mouse::getPosition();
+    auto wPos = Game::getInstance()->getWindow()->getPosition();
+    auto wSize = Game::getInstance()->getWindow()->getSize();
+    mouseCenterPosition = sf::Vector2i(wPos.x + wSize.x / 2, wPos.y + wSize.y / 2);
 
     // Register actions, maybe add default bindings so that it doesn't need initialization
     EventHandler::addAction("left", [this](auto && PH1) { leftKey(std::forward<decltype(PH1)>(PH1)); });
