@@ -5,7 +5,6 @@
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -35,3 +34,14 @@
 # JetBrains
 .idea/
 cmake-build-**/
+
+# ccls
+.ccls-cache/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+P1RV
+compile_commands.json

@@ -7,8 +7,10 @@
 
 
 #include <vector>
-#include "Component.h"
-#include "Transform.h"
+#include "component/Component.hpp"
+#include "component/Transform.hpp"
+
+class Scene; // forward declaration to avoid cycle with Scene.hpp
 
 class GameObject {
 private:
@@ -17,12 +19,18 @@ private:
     std::vector<Component*> componentList;
     Transform transform;
     // TODO Add Renderer Components as separate references (Optimization)
+
 public:
+    Scene* scene;
+
     GameObject() {
         this->id = idCounter++;
     }
+
     void addComponent(Component* newComponent);
     unsigned getId() const;
+
+    Transform* getTransform();
 
     template<typename T> T* getComponent() {
         for (Component* component : componentList) {
@@ -30,10 +38,6 @@ public:
                 return dynamic_cast<T *>(component);
         }
         return nullptr;
-    }
-
-    Transform * getComponent() {
-        return &(this->transform);
     }
 
     template<typename T> std::vector<T*> getComponents() {

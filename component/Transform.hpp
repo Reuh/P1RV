@@ -5,18 +5,26 @@
 #ifndef P1RV_TRANSFORM_H
 #define P1RV_TRANSFORM_H
 
-
 #include <SFML/System.hpp>
-#include "Component.h"
+#include "Component.hpp"
+#include <glm/glm.hpp>
 
 class Transform : public Component {
 private:
     // TODO Use quaternions
-    sf::Vector3f position;
-    sf::Vector3f scale;
-    sf::Vector3f rotation;
+    glm::vec3 vPosition;
+    glm::vec3 vScale;
+    glm::vec3 vRotation;
 public:
     Transform();
+
+    glm::vec3 getPosition();
+    void setPosition(glm::vec3 pos);
+
+    void translate(glm::vec3 vec);
+    void scale(glm::vec3 vec);
+
+    glm::mat4 getMatrix();
     void apply();
     // Maybe? static void restoreMatrix();
 };
