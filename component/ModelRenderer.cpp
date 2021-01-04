@@ -119,6 +119,14 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
         float shininess = 1.0f;
         mat->Get(AI_MATKEY_SHININESS_STRENGTH, shininess);
         material->shininess = shininess;
+
+    // default material
+    } else {
+        material->hasTexture = false;
+        material->diffuseColor = glm::vec3(1.f,1.f,1.f);
+        material->ambientColor = glm::vec3(1.f,1.f,1.f);
+        material->specularColor = glm::vec3(1.f,1.f,1.f);
+        material->shininess = 1.0f;
     }
 
     MeshRenderer r = MeshRenderer(vertices, indices, *material);
@@ -137,14 +145,15 @@ bool ModelRenderer::loadMaterialTextures(aiMaterial *mat, aiTextureType type, Te
         {
             if(j->path == (directory + '/' + string(str.C_Str())))
             {
-                texture = j;
+                texture->path = j->path;
+                texture->tex = j->tex;
                 return true;
             }
         }
         // if texture hasn't been loaded already, load it
         texture->path = directory + '/' + string(str.C_Str());
         if (!texture->tex.loadFromFile(texture->path)) {
-            std::cout << "ERROR: can't load texture " << texture->path << endl;
+            cout << "ERROR: can't load texture " << texture->path << endl;
             return false;
         }
         textures_loaded.push_back(texture); // add to loaded textures
