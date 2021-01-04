@@ -20,7 +20,6 @@ Navmesh::Navmesh(const std::string &filename) {
     }
 
     generateGraph(scene->mMeshes[scene->mRootNode->mChildren[0]->mMeshes[0]]);
-    delete scene;
 }
 
 void Navmesh::generateGraph(aiMesh *source) {
@@ -95,7 +94,7 @@ bool Navmesh::pointInsideTriangle(const node & triangle, const glm::vec3 & point
 }
 
 struct openPoint {
-    glm::vec3 * begin, * end;
+    glm::vec3 begin, * end;
     float g, h;
 };
 
@@ -149,81 +148,78 @@ std::vector<std::pair<glm::vec3, glm::vec3>> Navmesh::findPath(glm::vec3 & begin
 
             std::vector<openPoint> openPoints;
             float totalDistance = 0;
-            openPoints.push_back({&begin, beginTriangle->v1, distance(begin, *beginTriangle->v1), distance(end, *beginTriangle->v1)});
-            openPoints.push_back({&begin, beginTriangle->v2, distance(begin, *beginTriangle->v2), distance(end, *beginTriangle->v2)});
-            openPoints.push_back({&begin, beginTriangle->v3, distance(begin, *beginTriangle->v3), distance(end, *beginTriangle->v3)});
+            openPoints.push_back({begin, beginTriangle->v1, distance(begin, *beginTriangle->v1), distance(end, *beginTriangle->v1)});
+            openPoints.push_back({begin, beginTriangle->v2, distance(begin, *beginTriangle->v2), distance(end, *beginTriangle->v2)});
+            openPoints.push_back({begin, beginTriangle->v3, distance(begin, *beginTriangle->v3), distance(end, *beginTriangle->v3)});
 
             auto shortest = std::min_element(openPoints.begin(), openPoints.end(), compare);
-            result.emplace_back(result.back().second, *shortest->end);
-            totalDistance += distance(*shortest->begin, *shortest->end);
+            result.emplace_back(shortest->begin, *shortest->end);
+            totalDistance += distance(shortest->begin, *shortest->end);
             openPoints.erase(shortest);
 
             // TODO : Optimize using a binaryHeap
             while (!vertexOfTriangle(result.back().second, *endTriangle)) {
                 auto v = findVertex(result.back().second);
-                // Para cada face conectada ao vértice
                 for (auto n : v.nodes) {
                     openPoint * p;
-                    // Se os vértices estiverem em openPoints
                     if (*mesh[n].v1 != result.back().second) {
                         p = findInOpenPoints(openPoints, *mesh[n].v1);
                         if (p != nullptr) {
                             float cost = distance(result.back().second, *mesh[n].v1);
                             if (cost < p->g) {
-                                p->begin = &result.back().second;
+                                p->begin = result.back().second;
                                 p->g = totalDistance + cost;
                             }
                         } else {
                             // Add vertex
-                            openPoints.push_back({&result.back().second, mesh[n].v1, totalDistance + distance(result.back().second, *mesh[n].v1), distance(*mesh[n].v1, end)});
+                            openPoints.push_back({result.back().second, mesh[n].v1, totalDistance + distance(result.back().second, *mesh[n].v1), distance(*mesh[n].v1, end)});
                         }
                     }
-                    // Refazer para mesh[n].v2
                     if (*mesh[n].v2 != result.back().second) {
                         p = findInOpenPoints(openPoints, *mesh[n].v2);
                         if (p != nullptr) {
                             float cost = distance(result.back().second, *mesh[n].v2);
                             if (cost < p->g) {
-                                p->begin = &result.back().second;
+                                p->begin = result.back().second;
                                 p->g = totalDistance + cost;
                             }
                         } else {
                             // Add vertex
-                            openPoints.push_back({&result.back().second, mesh[n].v2, totalDistance + distance(result.back().second, *mesh[n].v2), distance(*mesh[n].v2, end)});
+                            openPoints.push_back({result.back().second, mesh[n].v2, totalDistance + distance(result.back().second, *mesh[n].v2), distance(*mesh[n].v2, end)});
                         }
                     }
-                    // Refazer para mesh[n].v3
                     if (*mesh[n].v3 != result.back().second) {
                         p = findInOpenPoints(openPoints, *mesh[n].v3);
                         if (p != nullptr) {
                             float cost = distance(result.back().second, *mesh[n].v3);
                             if (cost < p->g) {
-                                p->begin = &result.back().second;
+                                p->begin = result.back().second;
                                 p->g = totalDistance + cost;
                             }
                         } else {
                             // Add vertex
-                            openPoints.push_back({&result.back().second, mesh[n].v3, totalDistance + distance(result.back().second, *mesh[n].v3), distance(*mesh[n].v3, end)});
+                            openPoints.push_back({result.back().second, mesh[n].v3, totalDistance + distance(result.back().second, *mesh[n].v3), distance(*mesh[n].v3, end)});
                         }
                     }
                 }
 
                 shortest = std::min_element(openPoints.begin(), openPoints.end(), compare);
-                result.emplace_back(*shortest->begin, *shortest->end);
-                totalDistance += distance(*shortest->begin, *shortest->end);
+                result.emplace_back(shortest->begin, *shortest->end);
+                totalDistance = shortest->g + distance(shortest->begin, *shortest->end);
                 openPoints.erase(shortest);
             }
         }
-        result.emplace_back(end, end);
+        result.emplace_back(result.back().second, end);
     } else {
          std::cerr << "ERROR::Navmesh::Points outside of the navmesh." << std::endl;
     }
 
-    int i = 0;
+    unsigned i = result.size() - 2;
     while (true) {
-        if (i + 1 > result.size()) break;
-        if (result[i].second == result[i + 1].first) i++;
-        else result.erase(result.begin() + i + 1);
+        if (i >= result.size()) i = result.size() - 2;
+        if (i - 1 <= 0) break;
+        if (result[i].first == result[i - 1].second) i--;
+        else result.erase(result.begin() + (i - 1));
     }
 
     // TODO : Probably clean up the path from some unnecessary points
