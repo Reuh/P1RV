@@ -26,7 +26,7 @@ struct vertex {
     std::vector<unsigned> nodes;
 };
 
-class Navmesh {
+class NavMesh {
 private:
     std::vector<vertex> vertices;
     std::vector<node> mesh;
@@ -35,7 +35,7 @@ private:
     static inline float distance(const glm::vec3 & begin, const glm::vec3 & end);
     vertex & findVertex(const glm::vec3 & coord);
 public:
-    explicit Navmesh(const std::string & filename);
+    explicit NavMesh(const std::string & filename);
     std::vector<std::pair<glm::vec3, glm::vec3>> findPath(glm::vec3 & begin, glm::vec3 & end);
     int numberOfVertices();
     int numberOfFaces();

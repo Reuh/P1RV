@@ -2,9 +2,9 @@
 // Created by iagoc on 03/01/2021.
 //
 
-#include "Navmesh.hpp"
+#include "NavMesh.hpp"
 
-Navmesh::Navmesh(const std::string &filename) {
+NavMesh::NavMesh(const std::string &filename) {
     Assimp::Importer import;
     auto scene = import.ReadFile(filename, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_FlipUVs);
 
@@ -15,14 +15,14 @@ Navmesh::Navmesh(const std::string &filename) {
     }
 
     if (scene->mRootNode->mNumChildren <= 0) {
-        std::cerr << "ERROR::Navmesh::Source file must have one child." << std::endl;
+        std::cerr << "ERROR::NavMesh::Source file must have one child." << std::endl;
         return;
     }
 
     generateGraph(scene->mMeshes[scene->mRootNode->mChildren[0]->mMeshes[0]]);
 }
 
-void Navmesh::generateGraph(aiMesh *source) {
+void NavMesh::generateGraph(aiMesh *source) {
 
     // Loads all vertices
     for(unsigned int i = 0; i < source->mNumVertices; i++) {
@@ -75,7 +75,7 @@ void Navmesh::generateGraph(aiMesh *source) {
     }
 }
 
-bool Navmesh::pointInsideTriangle(const node & triangle, const glm::vec3 & point) {
+bool NavMesh::pointInsideTriangle(const node & triangle, const glm::vec3 & point) {
     glm::vec3 v0 = * triangle.v2 - * triangle.v1;
     glm::vec3 v1 = * triangle.v3 - * triangle.v1;
     glm::vec3 v2 = point - * triangle.v1;
@@ -107,7 +107,7 @@ inline bool vertexOfTriangle(glm::vec3 & _vertex, node & triangle) {
 }
 
 // Should probably use pointers here
-vertex & Navmesh::findVertex(const glm::vec3 & coord) {
+vertex & NavMesh::findVertex(const glm::vec3 & coord) {
     for (auto & v : vertices) {
         if (v.pos == coord) {
             return v;
@@ -122,7 +122,7 @@ openPoint * findInOpenPoints(std::vector<openPoint> & openPoints, glm::vec3 & co
     return nullptr;
 }
 
-std::vector<std::pair<glm::vec3, glm::vec3>> Navmesh::findPath(glm::vec3 & begin, glm::vec3 & end) {
+std::vector<std::pair<glm::vec3, glm::vec3>> NavMesh::findPath(glm::vec3 & begin, glm::vec3 & end) {
     std::vector<std::pair<glm::vec3, glm::vec3>> result;
     // Find triangle of the starting point
     node* beginTriangle = nullptr;
@@ -211,7 +211,7 @@ std::vector<std::pair<glm::vec3, glm::vec3>> Navmesh::findPath(glm::vec3 & begin
         }
         result.emplace_back(result.back().second, end);
     } else {
-         std::cerr << "ERROR::Navmesh::Points outside of the navmesh." << std::endl;
+         std::cerr << "ERROR::NavMesh::Points outside of the navmesh." << std::endl;
     }
 
     unsigned i = result.size() - 2;
@@ -228,14 +228,14 @@ std::vector<std::pair<glm::vec3, glm::vec3>> Navmesh::findPath(glm::vec3 & begin
     return result;
 }
 
-int Navmesh::numberOfVertices() {
+int NavMesh::numberOfVertices() {
     return vertices.size();
 }
 
-int Navmesh::numberOfFaces() {
+int NavMesh::numberOfFaces() {
     return mesh.size();
 }
 
-float Navmesh::distance(const glm::vec3 & begin, const glm::vec3 & end) {
+float NavMesh::distance(const glm::vec3 & begin, const glm::vec3 & end) {
     return glm::length(begin - end);
 }
