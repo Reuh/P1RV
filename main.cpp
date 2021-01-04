@@ -84,6 +84,7 @@ int main()
                     window->close();
                     break;
                 case sf::Event::Resized:
+                    glViewport(0, 0, event.size.width, event.size.height);
                     setPerspective(fov, (float)event.size.width / (float)event.size.height, nearPlane, farPlane);
                     break;
                 default:
