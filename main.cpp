@@ -21,6 +21,10 @@
 #include "MatrixStack.hpp"
 #include "component/Game.hpp"
 
+const float fov = glm::radians(60.0f);
+const float nearPlane = 0.1f;
+const float farPlane = 100.0f;
+
 int main()
 {
     // Get game instance
@@ -52,7 +56,7 @@ int main()
     Shader shader = Shader("shaders/vertex.glsl", "shaders/frag.glsl");
 
     // Mise en place de la perspective
-    setPerspective(glm::radians(60.0f), (float)800 / (float)600, 0.1f, 100.0f);
+    setPerspective(fov, (float)800 / (float)600, nearPlane, farPlane);
 
     // Init scene
     Scene* actualScene = new TestScene();
@@ -81,6 +85,7 @@ int main()
                     break;
                 case sf::Event::Resized:
                     glViewport(0, 0, event.size.width, event.size.height);
+                    setPerspective(fov, (float)event.size.width / (float)event.size.height, nearPlane, farPlane);
                     break;
                 default:
                     break;
