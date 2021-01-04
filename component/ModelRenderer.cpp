@@ -117,7 +117,7 @@ MeshRenderer ModelRenderer::processMesh(aiMesh *mesh, const aiScene *scene)
 
         // load shininess
         float shininess = 1.0f;
-        mat->Get(AI_MATKEY_SHININESS, shininess);
+        mat->Get(AI_MATKEY_SHININESS_STRENGTH, shininess);
         material->shininess = shininess;
     }
 

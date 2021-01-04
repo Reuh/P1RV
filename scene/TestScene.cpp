@@ -27,13 +27,14 @@ void TestScene::initialize() {
     auto maze = new GameObject();
     maze->getTransform()->scale(vec3(1, 1, 1));
     // TODO : Add a way to change model color from ModelRenderer properties
-    maze->addComponent(new ModelRenderer("models/labyrinth.obj"));
+    //maze->addComponent(new ModelRenderer("models/labyrinth.obj"));
+    maze->addComponent(new ModelRenderer("models/level/level.obj"));
     addObject(maze);
 
     auto player = new GameObject();
     player->addComponent(new PlayerScript());
     player->addComponent(new BoxCollider(true, vec3(-.2,0,-.2), vec3(.2,.7,.2)));
-    player->getTransform()->setPosition(glm::vec3(-2,0,0));
+    player->getTransform()->setPosition(glm::vec3(-2,1,0));
     addObject(player);
 
     auto skybox = new GameObject();
