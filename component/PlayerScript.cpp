@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 
 #include "MatrixStack.hpp"
 #include "PlayerScript.hpp"
@@ -17,6 +18,10 @@
 #ifdef _WIN32
 #include <winuser.h>
 #endif
+
+// some global sound buffers and sounds for sfx
+sf::SoundBuffer shotBuffer;
+sf::Sound shotSound;
 
 void PlayerScript::start() {
 	// Initial camera setup
@@ -52,6 +57,13 @@ void PlayerScript::start() {
         EventHandler::setBinding(sf::Keyboard::Q, "left");
         EventHandler::setBinding(sf::Keyboard::D, "right");
     }
+
+    // Load sounds
+    if (!shotBuffer.loadFromFile("sounds/cjdeets-shot.wav"))
+        std::cout << "ERROR: can't load sound sounds/cjdeets-shot.wav" << std::endl;
+    shotSound.setBuffer(shotBuffer);
+    shotSound.setRelativeToListener(true);
+    shotSound.setVolume(50.0f);
 }
 
 void PlayerScript::update(float dt) {
@@ -106,12 +118,20 @@ void PlayerScript::update(float dt) {
         // Update camera
         setLookAt(position, position+eye, up);
     }
+
+    // update audio listener position
+    sf::Listener::setPosition(position.x, position.y, position.z);
+    sf::Listener::setDirection(eye.x, eye.y, eye.z);
+    sf::Listener::setUpVector(up.x, up.y, up.z);
 }
 
 void PlayerScript::onWindowEvent(sf::Event event) {
 	if (event.type == sf::Event::MouseButtonPressed) {
 		// Fire
         if (event.mouseButton.button == sf::Mouse::Left) {
+            // Play shot SFX
+            shotSound.play();
+
             // We search for the object with a script (hitScript) hit by the ray starting from the player at the shortest distance (minDist).
             float minDist = -1; // -1 if no object intersect with ray
             Script* hitScript = nullptr; // nullptr if no object with a script intersect

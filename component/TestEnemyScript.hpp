@@ -5,6 +5,8 @@
 
 class TestEnemyScript : public Script {
 public:
+	void start() override;
+
 	void update(float dt) override;
 
 	void onHit() override;

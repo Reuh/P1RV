@@ -11,8 +11,8 @@ add_executable(P1RV ${SOURCES} ${COMPONENTS} ${SCENES})
 
 target_include_directories(P1RV PRIVATE .)
 
-#target_link_libraries(P1RV debug sfml-graphics-d sfml-system-d sfml-window-d)
-target_link_libraries(P1RV general sfml-graphics sfml-system sfml-window)
+#target_link_libraries(P1RV debug sfml-graphics-d sfml-system-d sfml-window-d sfml-audio-d)
+target_link_libraries(P1RV general sfml-graphics sfml-system sfml-window sfml-audio)
 
 if (WIN32)
 	target_include_directories(P1RV PRIVATE $ENV{SFML_DIR}/include)
