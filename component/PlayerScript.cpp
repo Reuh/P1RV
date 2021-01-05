@@ -144,7 +144,7 @@ void PlayerScript::onWindowEvent(sf::Event event) {
                     if (coll != nullptr) {
                         float dist = coll->collideRayDistance(position, eye);
                         if (dist >= 0) {
-                            if ((minDist == -1) or (dist < minDist)) {
+                            if ((minDist == -1) || (dist < minDist)) {
                                 auto script = iter->getComponent<Script>();
                                 if (script != nullptr) {
                                     minDist = dist;
