@@ -34,10 +34,21 @@ void Transform::setPosition(glm::vec3 pos) {
 	vPosition = pos;
 }
 
+glm::vec3 Transform::getRotation() {
+	return vRotation;
+}
+void Transform::setRotation(glm::vec3 rot) {
+	vRotation = rot;
+}
+
 void Transform::translate(glm::vec3 vec) {
 	vPosition += vec;
 }
 
 void Transform::scale(glm::vec3 vec) {
 	vScale *= vec;
+}
+
+void Transform::rotate(glm::vec3 vec) {
+	vRotation += vec;
 }
