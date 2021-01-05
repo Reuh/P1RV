@@ -41,7 +41,7 @@ void TestScene::initialize() {
     addObject(player);
 
     auto skybox = new GameObject();
-    skybox->getTransform()->scale(glm::vec3(50,50,50));
+    skybox->getTransform()->scale(glm::vec3(45,45,45));
     auto skyboxModel = new ModelRenderer("models/skybox.obj");
     skyboxModel->setLightning(false);
     skybox->addComponent(skyboxModel);
