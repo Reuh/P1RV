@@ -40,7 +40,7 @@ public:
         return nullptr;
     }
 
-    template<typename T> std::vector<T*> getComponents() {
+    template<typename T> std::vector<T*> getComponents() { // TODO: some caching would be interesting in order to use this every frame
         std::vector<Component*> components;
         for (Component* component : componentList) {
             if (dynamic_cast<T *>(component) != NULL)

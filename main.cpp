@@ -12,14 +12,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-#include <component/EventHandler.hpp>
+#include <EventHandler.hpp>
 
 #include "GameObject.hpp"
 #include "scene/Scene.hpp"
 #include "scene/TestScene.hpp"
 #include "Shader.hpp"
 #include "MatrixStack.hpp"
-#include "component/Game.hpp"
+#include "Game.hpp"
 
 const float fov = glm::radians(60.0f);
 const float nearPlane = 0.1f;
