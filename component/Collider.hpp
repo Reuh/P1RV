@@ -7,6 +7,7 @@
 
 class BoxCollider;
 
+// Base class for colliders.
 class Collider : public Component {
 private:
     bool rigid;

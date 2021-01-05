@@ -6,6 +6,7 @@
 
 using namespace glm;
 
+// Axis-aligned box collider
 class BoxCollider : public Collider {
 protected:
 	vec3 lb; // left-bottom corner (minimal coordinates)

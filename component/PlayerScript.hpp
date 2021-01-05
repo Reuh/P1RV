@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 
+// Game logic for the player.
 class PlayerScript : public Script {
 private:
 	// Player position. TODO: merge these with Transform (using the rotation vector)

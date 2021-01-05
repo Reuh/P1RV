@@ -8,6 +8,7 @@
 #include <GameObject.hpp>
 #include "Script.hpp"
 
+// Game logic for the flag.
 class RelicScript : public Script {
 private:
     GameObject* relic;

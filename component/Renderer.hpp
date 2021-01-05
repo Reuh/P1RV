@@ -9,10 +9,12 @@
 #include "Component.hpp"
 #include "Shader.hpp"
 
+// Base class for renderer components.
 class Renderer : public Component {
 private:
 	bool lightning = true;
 public:
+	// Enable/disable lightning for this renderer.
 	void setLightning(bool l) { lightning = l; };
 	bool getLightning() { return lightning; };
 

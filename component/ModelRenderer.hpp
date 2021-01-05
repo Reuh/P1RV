@@ -14,6 +14,7 @@
 
 using namespace std;
 
+// Renderer for a 3D model file using Assimp.
 class ModelRenderer : public Renderer {
 private:
 	// model data

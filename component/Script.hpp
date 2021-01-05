@@ -4,6 +4,7 @@
 #include <SFML/Window.hpp>
 #include "Component.hpp"
 
+// Base class to implement some scripted game logic for an object.
 class Script : public Component {
 public:
 	// Called when added to the scene

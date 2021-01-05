@@ -33,6 +33,7 @@ struct Material {
     float shininess;
 };
 
+// Renderer for a Mesh (list of vertices with a single material)
 class MeshRenderer : public Renderer {
 private:
 	//  render data

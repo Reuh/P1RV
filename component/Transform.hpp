@@ -9,6 +9,7 @@
 #include "Component.hpp"
 #include <glm/glm.hpp>
 
+// An object transform. Every object has this component.
 class Transform : public Component {
 private:
     // TODO Use quaternions

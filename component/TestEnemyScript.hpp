@@ -3,6 +3,7 @@
 
 #include "Script.hpp"
 
+// Game logic for the enemy.
 class TestEnemyScript : public Script {
 public:
 	void start() override;
