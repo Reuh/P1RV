@@ -62,7 +62,7 @@ void TestEnemyScript::update(float dt) {
 	} else {
 		playerVisible = false;
 	}
-    // Act on first hit object, if any
+    // Act if player in sight
     if (playerVisible) {
     	// do stuff
     }

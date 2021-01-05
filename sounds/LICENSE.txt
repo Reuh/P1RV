@@ -1,3 +1,7 @@
-All sounds are licensed under Creative Common Attribution License:
-GunShots by CJDeets: https://freesound.org/people/LittleRobotSoundFactory/sounds/316267/
-Robot1_01 by LittleRobotSoundFactory: https://freesound.org/people/CJDeets/sounds/476740/
+Sounds licensed under Creative Common Attribution License:
+cjdeets-shot.wav: GunShots by CJDeets: https://freesound.org/people/CJDeets/sounds/476740/
+littlerobotsoundfactory-robot1.wav: Robot1_01 by LittleRobotSoundFactory: https://freesound.org/people/LittleRobotSoundFactory/sounds/316267/
+
+Generated using Bfxr:
+relicget.wav
+
