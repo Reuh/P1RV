@@ -116,6 +116,7 @@ void PlayerScript::update(float dt) {
         eye = glm::rotate(front, angleX, right);
 
         this->object->getTransform()->setFront(front);
+        this->object->getTransform()->setRotation(glm::vec3(angleX, angleY, 0));
 
         // Update camera
         setLookAt(position, position+eye, up);
