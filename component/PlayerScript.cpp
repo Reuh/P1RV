@@ -112,17 +112,36 @@ void PlayerScript::onWindowEvent(sf::Event event) {
 	if (event.type == sf::Event::MouseButtonPressed) {
 		// Fire
         if (event.mouseButton.button == sf::Mouse::Left) {
+            // We search for the object with a script (hitScript) hit by the ray starting from the player at the shortest distance (minDist).
+            float minDist = -1; // -1 if no object intersect with ray
+            Script* hitScript = nullptr; // nullptr if no object with a script intersect
+            // search objects intersecting with ray
             glm::vec3 position = object->getTransform()->getPosition();
             auto objList = object->scene->getObjectList();
             for(auto & iter : *objList) {
                 if (iter != object) {
                     auto coll = iter->getComponent<Collider>();
-                    auto script = iter->getComponent<Script>();
-                    if (coll != nullptr && script != nullptr && coll->collideRay(position, eye)) {
-                       script->onHit();
+                    if (coll != nullptr) {
+                        float dist = coll->collideRayDistance(position, eye);
+                        if (dist >= 0) {
+                            if ((minDist == -1) or (dist < minDist)) {
+                                auto script = iter->getComponent<Script>();
+                                if (script != nullptr) {
+                                    minDist = dist;
+                                    hitScript = script;
+                                // Handle occlusion by rigid objects without script
+                                } else if (coll->isRigid()) {
+                                    minDist = dist;
+                                    hitScript = nullptr;
+                                }
+                            }
+                        }
                     }
                 }
             }
+            // Act on first hit object, if any
+            if (hitScript != nullptr)
+                hitScript->onHit();
         }
     }
 }

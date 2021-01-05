@@ -19,6 +19,7 @@ void TestScene::initialize() {
     auto model = new GameObject();
     Transform* transform = model->getTransform();
     transform->scale(vec3(0.5,0.5,0.5));
+    transform->translate(vec3(3,1,17));
     model->addComponent(new ModelRenderer("models/cube/cube.gltf"));
     model->addComponent(new BoxCollider(true, vec3(-1,-1,-1), vec3(1,1,1))); // TODO: automatically calculate from model data
     model->addComponent(new TestEnemyScript());

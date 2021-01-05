@@ -33,7 +33,7 @@ vec3 BoxCollider::getTransformedRt() {
 	return rt2;
 }
 
-bool BoxCollider::collideRay(vec3 origin, vec3 dir) {
+float BoxCollider::collideRayDistance(vec3 origin, vec3 dir) {
 	vec3 lb = getTransformedLb();
 	vec3 rt = getTransformedRt();
 
@@ -52,7 +52,11 @@ bool BoxCollider::collideRay(vec3 origin, vec3 dir) {
 	float tmin = std::max(std::max(std::min(t1, t2), std::min(t3, t4)), std::min(t5, t6));
 	float tmax = std::min(std::min(std::max(t1, t2), std::max(t3, t4)), std::max(t5, t6));
 
-	return tmax > std::max(tmin, 0.f);
+	if (tmax > std::max(tmin, 0.f)) {
+		return tmin;
+	} else {
+		return -1;
+	}
 }
 
 bool BoxCollider::collideBox(BoxCollider* box) {

@@ -21,7 +21,7 @@ public:
 
 	// Test if ray originating from origing along dir collides with this box.
 	// Apply parent transformation.
-    virtual bool collideRay(vec3 origin, vec3 dir) override;
+    virtual float collideRayDistance(vec3 origin, vec3 dir) override;
 
     // Test if collides with another box
     // Apply parent transformation.

@@ -21,6 +21,20 @@ bool GroupCollider::collideRay(vec3 origin, vec3 dir) {
 	}
 	return false;
 }
+float GroupCollider::collideRayDistance(vec3 origin, vec3 dir) {
+	float tmin = -1;
+	// Try to find closest intersection among all colliders in this group.
+	for (Collider* col : colliders) {
+		float dist = col->collideRayDistance(origin, dir);
+		if (dist >= 0) {
+			if (tmin >= 0)
+				tmin = std::min(tmin, dist);
+			else
+				tmin = dist;
+		}
+	}
+	return tmin;
+}
 
 bool GroupCollider::collideBox(BoxCollider* box) {
 	for (Collider* col : colliders) {
