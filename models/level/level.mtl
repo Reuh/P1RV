@@ -351,7 +351,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd LargeBuilding01.png
+map_Kd Package/LargeBuilding01.png
 
 newmtl palette.002
 Ns 0.000000
@@ -362,7 +362,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding01.png
+map_Kd Package/SmallBuilding01.png
 
 newmtl palette.003
 Ns 0.000000
@@ -373,7 +373,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding01.png
+map_Kd Package/SmallBuilding01.png
 
 newmtl palette.004
 Ns 0.000000
@@ -384,7 +384,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding01.png
+map_Kd Package/SmallBuilding01.png
 
 newmtl palette.005
 Ns 0.000000
@@ -395,7 +395,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding02.png
+map_Kd Package/SmallBuilding02.png
 
 newmtl palette.006
 Ns 0.000000
@@ -406,7 +406,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding03.png
+map_Kd Package/SmallBuilding03.png
 
 newmtl palette.007
 Ns 0.000000
@@ -417,7 +417,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TallBuilding01.png
+map_Kd Package/TallBuilding01.png
 
 newmtl palette.008
 Ns 0.000000
@@ -428,7 +428,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TallBuilding02.png
+map_Kd Package/TallBuilding02.png
 
 newmtl palette.009
 Ns 0.000000
@@ -439,7 +439,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TallBuilding03.png
+map_Kd Package/TallBuilding03.png
 
 newmtl palette.010
 Ns 0.000000
@@ -450,7 +450,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TinyBuilding01.png
+map_Kd Package/TinyBuilding01.png
 
 newmtl palette.011
 Ns 0.000000
@@ -461,7 +461,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TallBuilding03.png
+map_Kd Package/TallBuilding03.png
 
 newmtl palette.012
 Ns 0.000000
@@ -472,7 +472,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding02.png
+map_Kd Package/SmallBuilding02.png
 
 newmtl palette.013
 Ns 0.000000
@@ -483,7 +483,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TallBuilding01.png
+map_Kd Package/TallBuilding01.png
 
 newmtl palette.014
 Ns 0.000000
@@ -494,7 +494,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TinyBuilding01.png
+map_Kd Package/TinyBuilding01.png
 
 newmtl palette.015
 Ns 0.000000
@@ -505,7 +505,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TinyBuilding01.png
+map_Kd Package/TinyBuilding01.png
 
 newmtl palette.016
 Ns 0.000000
@@ -516,7 +516,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TinyBuilding01.png
+map_Kd Package/TinyBuilding01.png
 
 newmtl palette.017
 Ns 0.000000
@@ -527,7 +527,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding02.png
+map_Kd Package/SmallBuilding02.png
 
 newmtl palette.018
 Ns 0.000000
@@ -538,7 +538,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding02.png
+map_Kd Package/SmallBuilding02.png
 
 newmtl palette.019
 Ns 0.000000
@@ -549,7 +549,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TallBuilding03.png
+map_Kd Package/TallBuilding03.png
 
 newmtl palette.020
 Ns 0.000000
@@ -560,7 +560,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TallBuilding03.png
+map_Kd Package/TallBuilding03.png
 
 newmtl palette.021
 Ns 0.000000
@@ -571,7 +571,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TinyBuilding01.png
+map_Kd Package/TinyBuilding01.png
 
 newmtl palette.022
 Ns 0.000000
@@ -582,7 +582,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TinyBuilding01.png
+map_Kd Package/TinyBuilding01.png
 
 newmtl palette.025
 Ns 0.000000
@@ -593,7 +593,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding03.png
+map_Kd Package/SmallBuilding03.png
 
 newmtl palette.026
 Ns 0.000000
@@ -604,7 +604,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding02.png
+map_Kd Package/SmallBuilding02.png
 
 newmtl palette.027
 Ns 0.000000
@@ -615,7 +615,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding02.png
+map_Kd Package/SmallBuilding02.png
 
 newmtl palette.028
 Ns 0.000000
@@ -626,7 +626,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TallBuilding01.png
+map_Kd Package/TallBuilding01.png
 
 newmtl palette.031
 Ns 0.000000
@@ -637,7 +637,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd TallBuilding01.png
+map_Kd Package/TallBuilding01.png
 
 newmtl palette.033
 Ns 0.000000
@@ -648,7 +648,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding01.png
+map_Kd Package/SmallBuilding01.png
 
 newmtl palette.034
 Ns 0.000000
@@ -659,7 +659,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding01.png
+map_Kd Package/SmallBuilding01.png
 
 newmtl palette.035
 Ns 0.000000
@@ -670,7 +670,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd SmallBuilding01.png
+map_Kd Package/SmallBuilding01.png
 
 newmtl palette.036
 Ns 0.000000
@@ -681,4 +681,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd LargeBuilding01.png
+map_Kd Package/LargeBuilding01.png
