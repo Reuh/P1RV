@@ -25,6 +25,7 @@ Transform::Transform() {
     this->vPosition = glm::vec3(0,0,0);
     this->vRotation = glm::vec3(0,0,0);
     this->vScale = glm::vec3(1,1,1);
+    this->front = glm::vec3(1,0,0);
 }
 
 glm::vec3 Transform::getPosition() {
@@ -40,4 +41,12 @@ void Transform::translate(glm::vec3 vec) {
 
 void Transform::scale(glm::vec3 vec) {
 	vScale *= vec;
+}
+
+void Transform::setFront(glm::vec3 vec) {
+    this->front = vec;
+}
+
+glm::vec3 Transform::getFront() {
+    return this->front;
 }

@@ -13,9 +13,10 @@
 class Transform : public Component {
 private:
     // TODO Use quaternions
-    glm::vec3 vPosition;
-    glm::vec3 vScale;
-    glm::vec3 vRotation;
+    glm::vec3 vPosition{};
+    glm::vec3 vScale{};
+    glm::vec3 vRotation{};
+    glm::vec3 front{};
 public:
     Transform();
 
@@ -25,7 +26,13 @@ public:
     void translate(glm::vec3 vec);
     void scale(glm::vec3 vec);
 
+    void setFront(glm::vec3 vec);
+    glm::vec3 getFront();
+
+    void setRotation(glm::vec3 vec);
+
     glm::mat4 getMatrix();
+
     void apply();
     // Maybe? static void restoreMatrix();
 };
