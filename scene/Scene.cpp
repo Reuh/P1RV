@@ -30,7 +30,7 @@ void Scene::draw(Shader* shader) {
     shader->sendUniform("eyePos", getEye());
 
     shader->sendUniform("light.direction", glm::vec3(2,-3,1));
-    shader->sendUniform("light.ambient", glm::vec3(0.3,0.3,0.3));
+    shader->sendUniform("light.ambient", glm::vec3(0.4,0.4,0.4));
     shader->sendUniform("light.diffuse", glm::vec3(1,1,1));
     shader->sendUniform("light.specular", glm::vec3(1,1,1));
 
