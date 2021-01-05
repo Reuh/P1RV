@@ -5,10 +5,16 @@
 #include "GameObject.hpp"
 #include "NavMeshNavigator.hpp"
 #include <iostream>
+#include "Collider.hpp"
+#include "scene/Scene.hpp"
 
 // some global sound buffers and sounds for sfx
 sf::SoundBuffer hitBuffer;
 sf::Sound hitSound;
+
+TestEnemyScript::TestEnemyScript(GameObject * player) {
+    this->player = player;
+}
 
 void TestEnemyScript::start() {
     // Load sounds
@@ -29,6 +35,33 @@ void TestEnemyScript::update(float dt) {
 	} else if (enemy->getTransform()->getPosition() == end) {
         enemy->getComponent<NavMeshNavigator>()->setDestination(begin);
 	}
+
+	// Check if there are no rigid object between us and the player (ie we see them)
+    bool playerVisible = true;
+    // search objects intersecting with the ray going from this object to the player
+    glm::vec3 position = object->getTransform()->getPosition();
+    glm::vec3 playerDirection = player->getTransform()->getPosition() - position;
+    float playerDistance = glm::length(playerDistance);
+    glm::vec3 ray = glm::normalize(playerDirection);
+    auto objList = object->scene->getObjectList();
+    for(auto & iter : *objList) {
+        if (iter != object) {
+            auto coll = iter->getComponent<Collider>();
+            if (coll != nullptr && coll->isRigid()) {
+                float dist = coll->collideRayDistance(position, ray);
+                if (dist >= 0) {
+                	if (dist < playerDistance) { // the rigid object is between us and the player
+                		playerVisible = false;
+                		break;
+                	}
+                }
+            }
+        }
+    }
+    // Act on first hit object, if any
+    if (playerVisible) {
+    	// do stuff
+    }
 }
 
 void TestEnemyScript::onHit() {

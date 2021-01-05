@@ -5,7 +5,11 @@
 
 // Game logic for the enemy.
 class TestEnemyScript : public Script {
+private:
+	GameObject* player;
 public:
+	TestEnemyScript(GameObject* player);
+
 	void start() override;
 
 	void update(float dt) override;
