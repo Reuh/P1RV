@@ -9,9 +9,11 @@
 #include "RelicScript.hpp"
 
 
-RelicScript::RelicScript(GameObject * relic, GameObject * player) {
+RelicScript::RelicScript(GameObject * relic, GameObject * player, glm::vec3 destination) {
     this->relic = relic;
     this->player = player;
+    this->destination = destination;
+    this->originalPosition = relic->getTransform()->getPosition();
 }
 
 void RelicScript::update(float dt) {
@@ -24,7 +26,13 @@ void RelicScript::update(float dt) {
         relic->getTransform()->setPosition(player->getTransform()->getPosition() + 0.25 * t + glm::vec3(0, -.1, 0));
         // TODO : Rotate relic to follow the camera orientation
 
-        // TODO : Check if relic inside target zone
+        // Check if relic inside target zone
+        auto distance = relicPos - destination;
+        if (glm::length(distance) <= 2) {
+            attached = false;
+            relic->getTransform()->scale(glm::vec3(5, 5, 5));
+            relic->getTransform()->setPosition(originalPosition);
+        }
     } else {
         auto distance = relicPos - playerPos;
         // std::cout << glm::length(distance) << std::endl;

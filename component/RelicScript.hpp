@@ -13,9 +13,13 @@ class RelicScript : public Script {
 private:
     GameObject* relic;
     GameObject* player;
+
+    glm::vec3 destination;
+    glm::vec3 originalPosition;
+
     bool attached = false;
 public:
-    RelicScript(GameObject * relic, GameObject * player);
+    RelicScript(GameObject * relic, GameObject * player, glm::vec3 destination);
     void update(float dt) override;
 };
 

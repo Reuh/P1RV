@@ -33,8 +33,6 @@ public:
     void setFront(glm::vec3 vec);
     glm::vec3 getFront();
 
-    void setRotation(glm::vec3 vec);
-
     glm::mat4 getMatrix();
 
     void apply();

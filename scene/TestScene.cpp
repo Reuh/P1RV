@@ -24,7 +24,7 @@ void TestScene::initialize() {
     auto enemyModel = new ModelRenderer("models/enemy/MechaGolem.obj");
     enemy->addComponent(enemyModel);
     enemy->addComponent(enemyModel->makeCollider(true));
-    enemy->addComponent(new TestEnemyScript());
+    //enemy->addComponent(new TestEnemyScript());
     addObject(enemy);
 
     auto level = new GameObject();
@@ -51,6 +51,6 @@ void TestScene::initialize() {
     relic->addComponent(new ModelRenderer("models/Relic.obj"));
     relic->getTransform()->setPosition(glm::vec3(2, 0, 25));
     relic->getTransform()->scale(glm::vec3(0.4, 0.4, 0.4));
-    relic->addComponent(new RelicScript(relic, player));
+    relic->addComponent(new RelicScript(relic, player, glm::vec3(0,0,36.5)));
     addObject(relic);
 }
