@@ -3,15 +3,16 @@
 //
 
 #include "TestScene.hpp"
+#include <glm/glm.hpp>
+#include <iostream>
 #include "component/ModelRenderer.hpp"
 #include "component/BoxCollider.hpp"
 #include "component/Transform.hpp"
 #include "component/PlayerScript.hpp"
 #include "component/RelicScript.hpp"
 #include "component/TestEnemyScript.hpp"
-
-#include <glm/glm.hpp>
-#include <iostream>
+#include <component/NavMesh.hpp>
+#include <component/NavMeshNavigator.hpp>
 
 using namespace glm;
 
