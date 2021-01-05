@@ -39,6 +39,7 @@ void TestScene::initialize() {
     skybox->addComponent(new SkyboxScript(player));
     addObject(skybox);
 
+    auto navmesh = new NavMesh("models/level/navmesh.obj");
     auto enemy = new GameObject();
     Transform* transform = enemy->getTransform();
     transform->scale(vec3(0.4,0.4,0.4));
@@ -46,6 +47,7 @@ void TestScene::initialize() {
     auto enemyModel = new ModelRenderer("models/enemy/MechaGolem.obj");
     enemy->addComponent(enemyModel);
     enemy->addComponent(enemyModel->makeCollider(true));
+    enemy->addComponent(new NavMeshNavigator(navmesh));
     enemy->addComponent(new TestEnemyScript(player));
     addObject(enemy);
 
