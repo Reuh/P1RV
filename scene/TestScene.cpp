@@ -16,24 +16,22 @@
 using namespace glm;
 
 void TestScene::initialize() {
-    auto model = new GameObject();
-    Transform* transform = model->getTransform();
-    transform->scale(vec3(0.5,0.5,0.5));
-    transform->translate(vec3(3,1,17));
-    model->addComponent(new ModelRenderer("models/cube/cube.gltf"));
-    model->addComponent(new BoxCollider(true, vec3(-1,-1,-1), vec3(1,1,1))); // TODO: automatically calculate from model data
-    model->addComponent(new TestEnemyScript());
-    addObject(model);
+    auto enemy = new GameObject();
+    Transform* transform = enemy->getTransform();
+    transform->scale(vec3(0.4,0.4,0.4));
+    transform->translate(vec3(0,0,20)); // TODO: better initial placement
+    auto enemyModel = new ModelRenderer("models/enemy/MechaGolem.obj");
+    enemy->addComponent(enemyModel);
+    enemy->addComponent(enemyModel->makeCollider(true));
+    enemy->addComponent(new TestEnemyScript());
+    addObject(enemy);
 
-    auto maze = new GameObject();
-    maze->getTransform()->scale(vec3(1, 1, 1));
-    // TODO : Add a way to change model color from ModelRenderer properties
-    //maze->addComponent(new ModelRenderer("models/labyrinth.obj"));
+    auto level = new GameObject();
     auto levelCollisions = new ModelRenderer("models/level/levelcollisions.obj");
-    levelCollisions->object = maze;
-    maze->addComponent(new ModelRenderer("models/level/level.obj"));
-    maze->addComponent(levelCollisions->makeCollider(true));
-    addObject(maze);
+    levelCollisions->object = level; // need to be set manually since this component is never actually added to the object
+    level->addComponent(new ModelRenderer("models/level/level.obj"));
+    level->addComponent(levelCollisions->makeCollider(true));
+    addObject(level);
 
     auto player = new GameObject();
     player->addComponent(new PlayerScript());
@@ -50,8 +48,8 @@ void TestScene::initialize() {
 
     auto relic = new GameObject();
     relic->addComponent(new ModelRenderer("models/Relic.obj"));
-    relic->getTransform()->setPosition(glm::vec3(2, -0.5, 0));
-    relic->getTransform()->scale(glm::vec3(0.25, 0.25, 0.25));
+    relic->getTransform()->setPosition(glm::vec3(2, 0, 25));
+    relic->getTransform()->scale(glm::vec3(0.4, 0.4, 0.4));
     relic->addComponent(new RelicScript(relic, player));
     addObject(relic);
 }

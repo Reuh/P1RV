@@ -24,7 +24,7 @@ void RelicScript::update(float dt) {
     } else {
         auto distance = relicPos - playerPos;
         // std::cout << glm::length(distance) << std::endl;
-        if (glm::length(distance) <= 0.7) {
+        if (glm::length(distance) <= 1.1) {
             attached = true;
         }
     }
