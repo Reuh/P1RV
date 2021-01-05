@@ -9,7 +9,7 @@ class GameObject; // forward declaration (cycle)
 
 class Component {
 public:
-	GameObject* object;
+	GameObject* object{};
     virtual ~Component() = default;
 };
 
