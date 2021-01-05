@@ -8,6 +8,11 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include "RelicScript.hpp"
 #include <glm/gtx/vector_angle.hpp>
+#include <SFML/Audio.hpp>
+
+// some global sound buffers and sounds for sfx
+sf::SoundBuffer relicGetBuffer;
+sf::Sound relicGetSound;
 
 
 RelicScript::RelicScript(GameObject * relic, GameObject * player, glm::vec3 destination) {
@@ -15,13 +20,18 @@ RelicScript::RelicScript(GameObject * relic, GameObject * player, glm::vec3 dest
     this->player = player;
     this->destination = destination;
     this->originalPosition = relic->getTransform()->getPosition();
+
+    // Load sounds
+    if (!relicGetBuffer.loadFromFile("sounds/relicget.wav"))
+        std::cout << "ERROR: can't load sound sounds/relicget.wav" << std::endl;
+    relicGetSound.setBuffer(relicGetBuffer);
+    relicGetSound.setVolume(70.0f);
 }
 
 void RelicScript::update(float dt) {
     auto relicPos = relic->getTransform()->getPosition();
-    //std::cout << "R " << relicPos.x << " : " << relicPos.y << " : " << relicPos.z << std::endl;
     auto playerPos = player->getTransform()->getPosition();
-    //std::cout << "P " << playerPos.x << " : " << playerPos.y << " : " << playerPos.z << std::endl;
+
     if (this->attached) {
         // Place relic in front of player view
         auto t = glm::rotateY(player->getTransform()->getFront(), glm::radians(30.f));
@@ -31,14 +41,19 @@ void RelicScript::update(float dt) {
         // Check if relic inside target zone
         auto distance = relicPos - destination;
         if (glm::length(distance) <= 2) {
+            // SFX
+            relicGetSound.setPosition(relicPos.x, relicPos.y, relicPos.z);
+            relicGetSound.play();
+
+            // Put back at original position
             attached = false;
             relic->getTransform()->scale(glm::vec3(5, 5, 5));
             relic->getTransform()->setPosition(originalPosition);
-            // TODO: SFX
         }
+
     } else {
         auto distance = relicPos - playerPos;
-        // std::cout << glm::length(distance) << std::endl;
+        // Pick up relic if close enough
         if (glm::length(distance) <= 1.1) {
             attached = true;
             relic->getTransform()->scale(glm::vec3(0.2, 0.2, 0.2));

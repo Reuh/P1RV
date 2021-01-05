@@ -88,7 +88,6 @@ void PlayerScript::update(float dt) {
         auto objList = object->scene->getObjectList();
         for(auto & iter : *objList) {
             if (iter != object) {
-                // TODO: Expand to multiple colliders
                 auto coll = iter->getComponent<Collider>();
                 if (coll != nullptr && coll->isRigid() && coll->collideBox(boxcollider)) {
                    object->getTransform()->setPosition(oldPosition);
