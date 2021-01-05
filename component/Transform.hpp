@@ -34,6 +34,7 @@ public:
     glm::vec3 getFront();
 
     glm::mat4 getMatrix();
+    glm::mat4 getTranslateScaleMatrix();
 
     void apply();
     // Maybe? static void restoreMatrix();

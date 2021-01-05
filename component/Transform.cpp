@@ -17,6 +17,12 @@ glm::mat4 Transform::getMatrix() {
     return matrix;
 }
 
+glm::mat4 Transform::getTranslateScaleMatrix() {
+	glm::mat4 matrix = glm::translate(glm::mat4(1.0f), vPosition);
+    matrix = glm::scale(matrix, vScale);
+    return matrix;
+}
+
 void Transform::apply() {
 	applyMatrix(getMatrix());
 }

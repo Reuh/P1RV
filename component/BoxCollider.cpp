@@ -20,16 +20,14 @@ vec3 BoxCollider::getRt() {
 }
 
 vec3 BoxCollider::getTransformedLb() {
-	// Apply Transform to box (TODO: should probably handle rotation separately)
 	Transform* tr = object->getTransform();
-	vec3 lb2 = tr->getMatrix() * vec4(lb, 1.f);
+	vec3 lb2 = tr->getTranslateScaleMatrix() * vec4(lb, 1.f);
 	return lb2;
 }
 
 vec3 BoxCollider::getTransformedRt() {
-	// Apply Transform to box (TODO: should probably handle rotation separately)
 	Transform* tr = object->getTransform();
-	vec3 rt2 = tr->getMatrix() * vec4(rt, 1.f);
+	vec3 rt2 = tr->getTranslateScaleMatrix() * vec4(rt, 1.f);
 	return rt2;
 }
 
