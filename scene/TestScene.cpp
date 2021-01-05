@@ -44,7 +44,7 @@ void TestScene::initialize() {
     auto enemyModel = new ModelRenderer("models/enemy/MechaGolem.obj");
     enemy->addComponent(enemyModel);
     enemy->addComponent(enemyModel->makeCollider(true));
-    //enemy->addComponent(new TestEnemyScript(player));
+    enemy->addComponent(new TestEnemyScript(player));
     addObject(enemy);
 
     auto playerRelic = new GameObject();

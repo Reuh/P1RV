@@ -24,40 +24,44 @@ void TestEnemyScript::start() {
 }
 
 void TestEnemyScript::update(float dt) {
-    glm::vec3 begin = glm::vec3(-0.5, 0, -0.5);
-    glm::vec3 end = glm::vec3(-0.5, 0, -4);
-	auto enemy = this->object;
-	glm::vec3 pos = enemy->getComponent<NavMeshNavigator>()->nextStep(dt);
-    std::cout << pos.x << " : " << pos.y << " : " << pos.z << std::endl;
-	enemy->getTransform()->setPosition(pos);
-	if (enemy->getTransform()->getPosition() == begin) {
-        enemy->getComponent<NavMeshNavigator>()->setDestination(end);
-	} else if (enemy->getTransform()->getPosition() == end) {
-        enemy->getComponent<NavMeshNavigator>()->setDestination(begin);
-	}
+ //    glm::vec3 begin = glm::vec3(-0.5, 0, -0.5);
+ //    glm::vec3 end = glm::vec3(-0.5, 0, -4);
+	// auto enemy = this->object;
+	// glm::vec3 pos = enemy->getComponent<NavMeshNavigator>()->nextStep(dt);
+ //    std::cout << pos.x << " : " << pos.y << " : " << pos.z << std::endl;
+	// enemy->getTransform()->setPosition(pos);
+	// if (enemy->getTransform()->getPosition() == begin) {
+ //        enemy->getComponent<NavMeshNavigator>()->setDestination(end);
+	// } else if (enemy->getTransform()->getPosition() == end) {
+ //        enemy->getComponent<NavMeshNavigator>()->setDestination(begin);
+	// }
 
 	// Check if there are no rigid object between us and the player (ie we see them)
     bool playerVisible = true;
     // search objects intersecting with the ray going from this object to the player
     glm::vec3 position = object->getTransform()->getPosition();
-    glm::vec3 playerDirection = player->getTransform()->getPosition() - position;
-    float playerDistance = glm::length(playerDistance);
+    glm::vec3 playerDirection = player->getTransform()->getPosition() - position; // TODO: use the enemy eye direction
     glm::vec3 ray = glm::normalize(playerDirection);
-    auto objList = object->scene->getObjectList();
-    for(auto & iter : *objList) {
-        if (iter != object) {
-            auto coll = iter->getComponent<Collider>();
-            if (coll != nullptr && coll->isRigid()) {
-                float dist = coll->collideRayDistance(position, ray);
-                if (dist >= 0) {
-                	if (dist < playerDistance) { // the rigid object is between us and the player
-                		playerVisible = false;
-                		break;
-                	}
-                }
-            }
-        }
-    }
+    float playerDistance = player->getComponent<Collider>()->collideRayDistance(position, ray);
+    if (playerDistance >= 0) {
+	    auto objList = object->scene->getObjectList();
+	    for(auto & iter : *objList) {
+	        if (iter != object) {
+	            auto coll = iter->getComponent<Collider>();
+	            if (coll != nullptr && coll->isRigid()) {
+	                float dist = coll->collideRayDistance(position, ray);
+	                if (dist >= 0) {
+	                	if (dist < playerDistance) { // the rigid object is between us and the player
+	                		playerVisible = false;
+	                		break;
+	                	}
+	                }
+	            }
+	        }
+	    }
+	} else {
+		playerVisible = false;
+	}
     // Act on first hit object, if any
     if (playerVisible) {
     	// do stuff
