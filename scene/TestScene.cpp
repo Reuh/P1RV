@@ -28,12 +28,15 @@ void TestScene::initialize() {
     maze->getTransform()->scale(vec3(1, 1, 1));
     // TODO : Add a way to change model color from ModelRenderer properties
     //maze->addComponent(new ModelRenderer("models/labyrinth.obj"));
+    auto levelCollisions = new ModelRenderer("models/level/levelcollisions.obj");
+    levelCollisions->object = maze;
     maze->addComponent(new ModelRenderer("models/level/level.obj"));
+    maze->addComponent(levelCollisions->makeCollider(true));
     addObject(maze);
 
     auto player = new GameObject();
     player->addComponent(new PlayerScript());
-    player->addComponent(new BoxCollider(true, vec3(-.2,0,-.2), vec3(.2,.7,.2)));
+    player->addComponent(new BoxCollider(true, vec3(-.2,0.01,-.2), vec3(.2,.7,.2)));
     player->getTransform()->setPosition(glm::vec3(0,1,30));
     addObject(player);
 

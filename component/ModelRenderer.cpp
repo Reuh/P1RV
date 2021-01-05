@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include "Shader.hpp"
+#include "BoxCollider.hpp"
 
 vector<Texture*> textures_loaded; // global texture cache
 
@@ -20,10 +21,18 @@ ModelRenderer::ModelRenderer(const string& path) {
     processNode(scene->mRootNode, scene);
 }
 
+GroupCollider* ModelRenderer::makeCollider(bool rigid) {
+    GroupCollider* r = new GroupCollider(rigid);
+    r->object = object;
+    for(auto& mesh : meshes)
+        r->addCollider(mesh.makeCollider(rigid));
+    return r;
+}
+
 void ModelRenderer::render(Shader* shader) {
     shader->sendUniform("hasLightning", getLightning());
-    for(auto & meshe : meshes)
-        meshe.render(shader);
+    for(auto & mesh : meshes)
+        mesh.render(shader);
 }
 
 void ModelRenderer::processNode(aiNode *node, const aiScene *scene)

@@ -7,6 +7,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "Shader.hpp"
+#include "BoxCollider.hpp"
 
 using namespace std;
 
@@ -37,6 +38,9 @@ private:
 	//  render data
     unsigned int VAO, VBO, EBO;
 
+    glm::vec3 lb;
+    glm::vec3 rt;
+
 public:
 	// mesh data
     vector<Vertex>       vertices; // vertex list
@@ -44,6 +48,8 @@ public:
     Material             material; // mesh material
 
     MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices, Material material);
+
+    BoxCollider* makeCollider(bool rigid);
 
     void render(Shader* shader) override;
 };

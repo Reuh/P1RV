@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include "MeshRenderer.hpp"
 #include "Shader.hpp"
+#include "BoxCollider.hpp"
 
 #include <iostream>
 
@@ -36,6 +37,23 @@ MeshRenderer::MeshRenderer(vector<Vertex> vertices, vector<unsigned int> indices
     glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Color));
 
     glBindVertexArray(0);
+
+    // calculate bounds
+    lb = vertices[0].Position;
+    rt = vertices[0].Position;
+    for (auto v : vertices) {
+        auto pos = v.Position;
+        lb.x = std::min(lb.x, pos.x);
+        lb.y = std::min(lb.y, pos.y);
+        lb.z = std::min(lb.z, pos.z);
+        rt.x = std::max(rt.x, pos.x);
+        rt.y = std::max(rt.y, pos.y);
+        rt.z = std::max(rt.z, pos.z);
+    }
+}
+
+BoxCollider* MeshRenderer::makeCollider(bool rigid) {
+    return new BoxCollider(rigid, lb, rt);
 }
 
 void MeshRenderer::render(Shader* shader) {

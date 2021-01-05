@@ -18,6 +18,9 @@ public:
     bool isRigid() const {
         return this->rigid;
     }
+    void setRigid(bool _rigid) {
+        this->rigid = _rigid;
+    }
     virtual bool collideRay(glm::vec3 origin, glm::vec3 dir) = 0;
     virtual bool collideBox(BoxCollider* box) = 0;
 };

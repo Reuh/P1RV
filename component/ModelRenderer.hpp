@@ -10,7 +10,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "Shader.hpp"
-
+#include "GroupCollider.hpp"
 
 using namespace std;
 
@@ -33,6 +33,10 @@ public:
 
     ModelRenderer(const string& path);
 
+    // Create a new collider associated with every mesh in this model.
+    GroupCollider* makeCollider(bool rigid);
+
+    // Render all the mesh in the model.
     void render(Shader* shader) override;
 };
 
