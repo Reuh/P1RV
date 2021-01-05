@@ -47,10 +47,17 @@ void TestScene::initialize() {
     skybox->addComponent(skyboxModel);
     addObject(skybox);
 
-    auto relic = new GameObject();
-    relic->addComponent(new ModelRenderer("models/Relic.obj"));
-    relic->getTransform()->setPosition(glm::vec3(2, 0, 25));
-    relic->getTransform()->scale(glm::vec3(0.4, 0.4, 0.4));
-    relic->addComponent(new RelicScript(relic, player, glm::vec3(0,0,36.5)));
-    addObject(relic);
+    auto playerRelic = new GameObject();
+    playerRelic->addComponent(new ModelRenderer("models/Relic.obj"));
+    playerRelic->getTransform()->setPosition(glm::vec3(0, 0, -34));
+    playerRelic->getTransform()->scale(glm::vec3(0.4, 0.4, 0.4));
+    playerRelic->addComponent(new RelicScript(playerRelic, player, glm::vec3(0,0,36.5)));
+    addObject(playerRelic);
+
+    auto enemyRelic = new GameObject();
+    enemyRelic->addComponent(new ModelRenderer("models/Relic.obj"));
+    enemyRelic->getTransform()->setPosition(glm::vec3(0, 0, 34));
+    enemyRelic->getTransform()->scale(glm::vec3(0.4, 0.4, 0.4));
+    enemyRelic->addComponent(new RelicScript(enemyRelic, enemy, glm::vec3(0,0,-36.5)));
+    addObject(enemyRelic);
 }
