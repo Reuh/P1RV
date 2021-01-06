@@ -5,7 +5,6 @@
 #ifndef P1RV_TRANSFORM_H
 #define P1RV_TRANSFORM_H
 
-#include <SFML/System.hpp>
 #include "Component.hpp"
 #include <glm/glm.hpp>
 

@@ -9,7 +9,7 @@ class SkyboxScript : public Script {
 private:
     GameObject* player;
 public:
-    SkyboxScript(GameObject* player);
+    explicit SkyboxScript(GameObject* player);
     void update(float dt) override;
 };
 

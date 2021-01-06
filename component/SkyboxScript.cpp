@@ -1,4 +1,3 @@
-#include <glm/glm.hpp>
 #include "SkyboxScript.hpp"
 
 SkyboxScript::SkyboxScript(GameObject * player) {

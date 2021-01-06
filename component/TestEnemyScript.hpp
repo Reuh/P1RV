@@ -2,6 +2,7 @@
 #define P1RV_TESTENEMYSCRIPT_H
 
 #include "Script.hpp"
+#include <glm/glm.hpp>
 
 // Game logic for the enemy.
 class TestEnemyScript : public Script {
