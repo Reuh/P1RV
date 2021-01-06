@@ -23,6 +23,7 @@ public:
     explicit NavMeshNavigator(NavMesh * navMesh);
     glm::vec3 nextStep(float dt);
     void setDestination(glm::vec3 & vec);
+    glm::vec3 getDestination();
     void setWalkingSpeed(float speed);
     void setTurningSpeed(float speed);
 };

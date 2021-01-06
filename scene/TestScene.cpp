@@ -39,17 +39,7 @@ void TestScene::initialize() {
     skybox->addComponent(new SkyboxScript(player));
     addObject(skybox);
 
-    auto navmesh = new NavMesh("models/level/navmesh.obj");
     auto enemy = new GameObject();
-    Transform* transform = enemy->getTransform();
-    transform->scale(vec3(0.4,0.4,0.4));
-    transform->translate(vec3(0,0,20)); // TODO: better initial placement
-    auto enemyModel = new ModelRenderer("models/enemy/MechaGolem.obj");
-    enemy->addComponent(enemyModel);
-    enemy->addComponent(enemyModel->makeCollider(true));
-    enemy->addComponent(new NavMeshNavigator(navmesh));
-    enemy->addComponent(new TestEnemyScript(player));
-    addObject(enemy);
 
     auto playerRelic = new GameObject();
     playerRelic->addComponent(new ModelRenderer("models/Relic.obj"));
@@ -64,4 +54,15 @@ void TestScene::initialize() {
     enemyRelic->getTransform()->scale(glm::vec3(0.4, 0.4, 0.4));
     enemyRelic->addComponent(new RelicScript(enemyRelic, enemy, glm::vec3(0,0,-36.5)));
     addObject(enemyRelic);
+
+    auto navmesh = new NavMesh("models/level/navmesh.obj");
+    Transform* transform = enemy->getTransform();
+    transform->scale(vec3(0.4,0.4,0.4));
+    transform->translate(vec3(0,0,20)); // TODO: better initial placement
+    auto enemyModel = new ModelRenderer("models/enemy/MechaGolem.obj");
+    enemy->addComponent(enemyModel);
+    enemy->addComponent(enemyModel->makeCollider(true));
+    enemy->addComponent(new NavMeshNavigator(navmesh));
+    enemy->addComponent(new TestEnemyScript(player, enemyRelic));
+    addObject(enemy);
 }

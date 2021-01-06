@@ -53,3 +53,7 @@ void NavMeshNavigator::setWalkingSpeed(float speed) {
 void NavMeshNavigator::setTurningSpeed(float speed) {
     this->turningSpeed = speed;
 }
+
+glm::vec3 NavMeshNavigator::getDestination() {
+    return this->destination;
+}

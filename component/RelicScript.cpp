@@ -61,4 +61,8 @@ void RelicScript::update(float dt) {
     }
 }
 
+bool RelicScript::isAttached() {
+    return attached;
+}
+
 

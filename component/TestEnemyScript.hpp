@@ -7,8 +7,10 @@
 class TestEnemyScript : public Script {
 private:
 	GameObject* player;
+	GameObject* relic;
+	glm::vec3 lastPos;
 public:
-	TestEnemyScript(GameObject* player);
+	explicit TestEnemyScript(GameObject* player, GameObject* relic);
 
 	void start() override;
 
