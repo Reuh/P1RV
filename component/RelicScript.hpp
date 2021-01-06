@@ -22,6 +22,7 @@ public:
     RelicScript(GameObject * relic, GameObject * player, glm::vec3 destination);
     void update(float dt) override;
     bool isAttached();
+    void reset();
 };
 
 

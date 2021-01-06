@@ -14,6 +14,7 @@
 #include "Game.hpp"
 #include "EventHandler.hpp"
 #include "BoxCollider.hpp"
+#include "RelicScript.hpp"
 
 #ifdef _WIN32
 #include <winuser.h>
@@ -22,6 +23,10 @@
 // some global sound buffers and sounds for sfx
 sf::SoundBuffer shotBuffer;
 sf::Sound shotSound;
+
+PlayerScript::PlayerScript(GameObject* relic) {
+    this->relic = relic;
+}
 
 void PlayerScript::start() {
 	// Initial camera setup
@@ -186,4 +191,14 @@ void PlayerScript::upKey(sf::Event::EventType eventType) {
 void PlayerScript::downKey(sf::Event::EventType eventType) {
     if (eventType == sf::Event::KeyPressed) sDown = true;
     else if (eventType == sf::Event::KeyReleased) sDown = false;
+}
+
+void PlayerScript::onHit() {
+    // Release relic
+    relic->getComponent<RelicScript>()->reset();
+
+    // Teleport back to base
+    object->getTransform()->setPosition(glm::vec3(0, 1, 36.5));
+
+    // TODO: play SFX
 }

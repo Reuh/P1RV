@@ -65,4 +65,10 @@ bool RelicScript::isAttached() {
     return attached;
 }
 
-
+void RelicScript::reset() {
+    if (attached) {
+        attached = false;
+        relic->getTransform()->scale(glm::vec3(5, 5, 5));
+    }
+    relic->getTransform()->setPosition(originalPosition);
+}

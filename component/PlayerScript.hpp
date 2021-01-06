@@ -17,14 +17,20 @@ private:
 	float angleX = 0; // eye rotation
 	float angleY = 0;
 	const float rotateSpeed = 0.1; // rotation speed per second
+
 	// key pressed state
     bool sLeft = false;
     bool sRight = false;
     bool sUp = false;
     bool sDown = false;
+
 	// Mouse center coordinates
 	sf::Vector2i mouseCenterPosition;
+
+	// Relic
+	GameObject* relic;
 public:
+	explicit PlayerScript(GameObject* relic);
 	void start() override;
 	void update(float dt) override;
 	void onWindowEvent(sf::Event event) override;
@@ -32,6 +38,7 @@ public:
 	void rightKey(sf::Event::EventType eventType);
 	void upKey(sf::Event::EventType eventType);
 	void downKey(sf::Event::EventType eventType);
+	void onHit() override;
 };
 
 #endif

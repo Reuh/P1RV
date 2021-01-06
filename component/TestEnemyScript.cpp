@@ -62,7 +62,9 @@ void TestEnemyScript::update(float dt) {
             std::mt19937 randomNumbers(rd());
             if (random(randomNumbers) < 50) {
                 // Kill Player
-                player->getTransform()->setPosition(glm::vec3(0, 0, 20));
+                auto playerScript = player->getComponent<Script>();
+                if (playerScript != nullptr)
+                    playerScript->onHit();
             }
         } else {
             if (glm::length(lastPos - player->getTransform()->getPosition()) > 2) {
@@ -90,7 +92,13 @@ void TestEnemyScript::update(float dt) {
 }
 
 void TestEnemyScript::onHit() {
-	std::cout << "Touché!" << std::endl;
+    // Release relic
+    relic->getComponent<RelicScript>()->reset();
+
+    // Teleport back to base
+    auto basePos = glm::vec3(0,0,-36.5);
+    object->getTransform()->setPosition(basePos);
+    object->getComponent<NavMeshNavigator>()->setDestination(basePos);
 
 	// Play SFX
 	glm::vec3 pos = object->getTransform()->getPosition();
