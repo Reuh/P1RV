@@ -1,6 +1,6 @@
 # P1RV - OpenGL game
 
-An C++ and OpenGL game made for the first project of Virtual Reality option at École Centrale de Nantes
+An C++ and OpenGL game made for the first project of Virtual Reality option at École Centrale de Nantes.
 
 ## Introduction
 
@@ -19,19 +19,20 @@ You will find a small FPS-like example of it's usage.
 
 ### Installation
 
+Project has been tested on both Linux and Windows.
+
 1. Make sure you have all libraries listed above installed for your machine.
-2. Clone the repo
+2. Clone the repo:
 ```sh
 git clone https://github.com/Reuh/P1RV.git
 ```
-3. Use CMake to configure the project
-3.1 (Windows Only) Configure the environment variables pointing to the needed libraries
-4. Use CMake to generate the project
-5. Compile it
+3. Use CMake to configure the project. (Windows Only: Configure the environment variables pointing to the needed libraries)
+4. Use CMake to generate the project.
+5. Compile it.
 
 ## Usage
 
-The projects generates an executable that 
+The projects generates an executable `P1RV`. You can move using ZQSD/WASD and the mouse. Fire using left click. Press escape to exit the game. 
 
 ## Contact
 
