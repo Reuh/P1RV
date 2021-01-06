@@ -13,6 +13,7 @@
 #include "component/TestEnemyScript.hpp"
 #include <component/NavMesh.hpp>
 #include <component/NavMeshNavigator.hpp>
+#include <component/SkyboxScript.hpp>
 
 using namespace glm;
 
@@ -24,18 +25,19 @@ void TestScene::initialize() {
     level->addComponent(levelCollisions->makeCollider(true));
     addObject(level);
 
-    auto skybox = new GameObject();
-    skybox->getTransform()->scale(glm::vec3(45,45,45));
-    auto skyboxModel = new ModelRenderer("models/skybox.obj");
-    skyboxModel->setLightning(false);
-    skybox->addComponent(skyboxModel);
-    addObject(skybox);
-
     auto player = new GameObject();
     player->addComponent(new PlayerScript());
     player->addComponent(new BoxCollider(true, vec3(-.2,0.01,-.2), vec3(.2,.7,.2)));
     player->getTransform()->setPosition(glm::vec3(0,1,30));
     addObject(player);
+
+    auto skybox = new GameObject();
+    skybox->getTransform()->scale(glm::vec3(50,50,50));
+    auto skyboxModel = new ModelRenderer("models/skybox.obj");
+    skyboxModel->setLightning(false);
+    skybox->addComponent(skyboxModel);
+    skybox->addComponent(new SkyboxScript(player));
+    addObject(skybox);
 
     auto enemy = new GameObject();
     Transform* transform = enemy->getTransform();
