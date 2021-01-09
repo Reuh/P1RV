@@ -34,6 +34,12 @@ int countMatches(node * n1, node * n2) {
     return c;
 }
 
+glm::vec3 barycenter(node * node) {
+    glm::vec3 barycenter = (1.f / 2.f) * (node->vertices[0] + node->vertices[1]);
+    barycenter = (0.5) * (barycenter + node->vertices[2]);
+    return barycenter;
+}
+
 void NavMesh::generateGraph(aiMesh *source) {
     // Loads all faces
     for(int i = 0; i < source->mNumFaces; i++)
@@ -44,6 +50,7 @@ void NavMesh::generateGraph(aiMesh *source) {
         for (int j = 0; j < face.mNumIndices; j++) {
             t.vertices[v++] = glm::vec3(source->mVertices[face.mIndices[j]].x, source->mVertices[face.mIndices[j]].y, source->mVertices[face.mIndices[j]].z);
         }
+        t.barycenter = barycenter(&t);
         mesh.push_back(t);
     }
 
@@ -72,10 +79,10 @@ float distance(const glm::vec3 & begin, const glm::vec3 & end) {
     return glm::length(begin - end);
 }
 
-bool pointInsideTriangle(const node & triangle, const glm::vec3 & point) {
-    glm::vec3 v0 = triangle.vertices[1] - triangle.vertices[0];
-    glm::vec3 v1 = triangle.vertices[2] - triangle.vertices[0];
-    glm::vec3 v2 = point - triangle.vertices[0];
+bool pointInsideTriangle(node * triangle, glm::vec3 * point) {
+    glm::vec3 v0 = triangle->vertices[2] - triangle->vertices[0];
+    glm::vec3 v1 = triangle->vertices[1] - triangle->vertices[0];
+    glm::vec3 v2 = *point - triangle->vertices[0];
 
     float d00 = glm::dot(v0, v0);
     float d01 = glm::dot(v0, v1);
@@ -99,12 +106,6 @@ bool compare(const possiblePoint &a, const possiblePoint &b) {
     return (a.g + a.h) < (b.g + b.h);
 }
 
-glm::vec3 barycenter(node * node) {
-    glm::vec3 barycenter = (1.f / 2.f) * (node->vertices[0] + node->vertices[1]);
-    barycenter = (0.5) * (barycenter + node->vertices[2]);
-    return barycenter;
-}
-
 int findInPossiblePoints(const std::vector<possiblePoint>& list, int node) {
     for (int i = 0; i < list.size(); i++) {
         if (list[i].end == node) return i;
@@ -118,17 +119,17 @@ std::vector<glm::vec3> NavMesh::findPath(glm::vec3 & begin, glm::vec3 & end) {
     // Find triangle of the starting point
     int beginNode = -1;
     for (int i = 0; i < mesh.size(); i++) {
-        if (pointInsideTriangle(mesh[i], begin)) {
+        if (pointInsideTriangle(&mesh[i], &begin)) {
             beginNode = i;
-            break;
+            //break;
         }
     }
     // Find triangle of the ending point
     int endNode = -1;
     for (int i = 0; i < mesh.size(); i++) {
-        if (pointInsideTriangle(mesh[i], end)) {
+        if (pointInsideTriangle(&mesh[i], &end)) {
             endNode = i;
-            break;
+            //break;
         }
     }
     // Find the path between the two
@@ -143,7 +144,7 @@ std::vector<glm::vec3> NavMesh::findPath(glm::vec3 & begin, glm::vec3 & end) {
                 // put points inside the list
                 for (auto node : mesh[path.back().second].nodes) {
                     int nodePos = findInPossiblePoints(possiblePoints, node);
-                    float cost = distance(barycenter(&mesh[path.back().second]), barycenter(&mesh[node]));
+                    float cost = distance(mesh[path.back().second].barycenter, mesh[node].barycenter);
                     if (nodePos >= 0) {
                         // Update
                         if (cost < possiblePoints[nodePos].g) {
@@ -152,14 +153,14 @@ std::vector<glm::vec3> NavMesh::findPath(glm::vec3 & begin, glm::vec3 & end) {
                         }
                     } else {
                         possiblePoints.push_back({path.back().second, node, totalDistance + cost,
-                            distance(barycenter(&mesh[node]), barycenter(&mesh[endNode]))});
+                            distance(mesh[node].barycenter, mesh[endNode].barycenter)});
                     }
                 }
 
                 // TODO: find shortest
                 auto shortest = std::min_element(possiblePoints.begin(), possiblePoints.end(), compare);
                 path.emplace_back(shortest->begin, shortest->end);
-                totalDistance = shortest->g + distance(barycenter(&mesh[shortest->begin]), barycenter(&mesh[shortest->end]));
+                totalDistance = shortest->g + distance(mesh[shortest->begin].barycenter, mesh[shortest->end].barycenter);
                 possiblePoints.erase(shortest);
             } while(path.back().second != endNode);
         }
@@ -179,9 +180,11 @@ std::vector<glm::vec3> NavMesh::findPath(glm::vec3 & begin, glm::vec3 & end) {
     // TODO : Add a string pulling algorithm here
     // Make a list of points
     std::vector<glm::vec3> result;
+    result.push_back(begin);
     for (auto pair : path) {
-        result.emplace_back(barycenter(&mesh[pair.second]));
+        result.emplace_back(mesh[pair.second].barycenter);
     }
+    result.push_back(end);
     return result;
 }
 

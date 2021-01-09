@@ -19,7 +19,7 @@
 struct node {
     // TODO : Change to support different vertex sizes
     glm::vec3 vertices[3];
-    // TODO : Add barycenter here
+    glm::vec3 barycenter;
     std::vector<int> nodes;
 };
 
