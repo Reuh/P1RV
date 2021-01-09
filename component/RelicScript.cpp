@@ -45,6 +45,9 @@ void RelicScript::update(float dt) {
             relicGetSound.setPosition(relicPos.x, relicPos.y, relicPos.z);
             relicGetSound.play();
 
+            // TODO: visual feedback for score
+            std::cout << "+1 point" << std::endl;
+
             // Put back at original position
             attached = false;
             relic->getTransform()->scale(glm::vec3(5, 5, 5));

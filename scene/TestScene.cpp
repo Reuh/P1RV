@@ -18,17 +18,11 @@
 using namespace glm;
 
 void TestScene::initialize() {
-    /*
     auto level = new GameObject();
     auto levelCollisions = new ModelRenderer("models/level/levelcollisions.obj");
     levelCollisions->object = level; // need to be set manually since this component is never actually added to the object
     level->addComponent(new ModelRenderer("models/level/level.obj"));
     level->addComponent(levelCollisions->makeCollider(true));
-    addObject(level);
-    */
-
-    auto level = new GameObject();
-    level->addComponent(new ModelRenderer("models/level/navmesh.obj"));
     addObject(level);
 
     auto player = new GameObject();

@@ -55,7 +55,6 @@ void TestEnemyScript::update(float dt) {
 	}
     // Act if player in sight
     auto navigator = object->getComponent<NavMeshNavigator>();
-    playerVisible = false;
     if (playerVisible) {
         if (glm::length(playerDirection) < 5) {
             std::uniform_int_distribution<int> random(0, 999);

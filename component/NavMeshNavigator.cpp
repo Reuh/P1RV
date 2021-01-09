@@ -40,7 +40,7 @@ glm::vec3  NavMeshNavigator::nextStep(float dt) {
 void NavMeshNavigator::setDestination(glm::vec3 & vec) {
     this->destination = vec;
     auto begin = this->object->getTransform()->getPosition();
-    std::cout << "(" << begin.x << ", " << begin.y << ", " << begin.z << ") -> (" << this->destination.x <<  ", " << this->destination.y << ", " << this->destination.z << ")" << std::endl;
+    //std::cout << "(" << begin.x << ", " << begin.y << ", " << begin.z << ") -> (" << this->destination.x <<  ", " << this->destination.y << ", " << this->destination.z << ")" << std::endl;
     this->path = navMesh->findPath(begin, this->destination);
     totalDistance = 0;
     lastDistance = 0;
