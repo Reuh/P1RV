@@ -13,7 +13,7 @@ class NavMeshNavigator : public Component {
 private:
     NavMesh * navMesh;
     glm::vec3 destination{};
-    std::vector<std::pair<glm::vec3, glm::vec3>> path;
+    std::vector<glm::vec3> path;
     float walkingSpeed = 0.5;
     float turningSpeed = 5;
     unsigned lastPoint = 0;

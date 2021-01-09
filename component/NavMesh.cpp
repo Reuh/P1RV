@@ -10,11 +10,13 @@ NavMesh::NavMesh(const std::string &filename) {
 
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
-        std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+        // TODO : Throw a warning
+        std::cerr << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
         return;
     }
 
     if (scene->mRootNode->mNumChildren <= 0) {
+        // TODO : Throw a warning
         std::cerr << "ERROR::NavMesh::Source file must have one child." << std::endl;
         return;
     }
@@ -22,63 +24,58 @@ NavMesh::NavMesh(const std::string &filename) {
     generateGraph(scene->mMeshes[scene->mRootNode->mChildren[0]->mMeshes[0]]);
 }
 
-void NavMesh::generateGraph(aiMesh *source) {
-
-    // Loads all vertices
-    for(unsigned int i = 0; i < source->mNumVertices; i++) {
-        vertex t;
-        t.pos = glm::vec3(source->mVertices[i].x, source->mVertices[i].y, source->mVertices[i].z);
-        vertices.push_back(t);
+int countMatches(node * n1, node * n2) {
+    int c = 0;
+    for (int i = 0; i <= 2; i++) {
+        for (int j = 0; j <= 2; j++) {
+            c += (n1->vertices[i] == n2->vertices[j]);
+        }
     }
+    return c;
+}
 
+void NavMesh::generateGraph(aiMesh *source) {
     // Loads all faces
-    for(unsigned int i = 0; i < source->mNumFaces; i++)
+    for(int i = 0; i < source->mNumFaces; i++)
     {
         aiFace face = source->mFaces[i];
         node t;
-        t.v1 = &(vertices[face.mIndices[0]].pos);
-        t.v2 = &(vertices[face.mIndices[1]].pos);
-        t.v3 = &(vertices[face.mIndices[2]].pos);
+        int v = 0;
+        for (int j = 0; j < face.mNumIndices; j++) {
+            t.vertices[v++] = glm::vec3(source->mVertices[face.mIndices[j]].x, source->mVertices[face.mIndices[j]].y, source->mVertices[face.mIndices[j]].z);
+        }
         mesh.push_back(t);
-
-        vertices[face.mIndices[0]].nodes.push_back(mesh.size() - 1);
-        vertices[face.mIndices[1]].nodes.push_back(mesh.size() - 1);
-        vertices[face.mIndices[2]].nodes.push_back(mesh.size() - 1);
     }
 
-    for (unsigned int i = 0; i < mesh.size(); i++) {
-        for (unsigned int j = i + 1; j < mesh.size(); j++) {
-            unsigned matches = (mesh[i].v1 == mesh[j].v1) +
-                    (mesh[i].v1 == mesh[j].v2) +
-                    (mesh[i].v1 == mesh[j].v3) +
-                    (mesh[i].v2 == mesh[j].v1) +
-                    (mesh[i].v2 == mesh[j].v2) +
-                    (mesh[i].v2 == mesh[j].v3) +
-                    (mesh[i].v3 == mesh[j].v1) +
-                    (mesh[i].v3 == mesh[j].v2) +
-                    (mesh[i].v3 == mesh[j].v3);
-            if (matches >= 2) {
-                // Se o nó não foi encontrado no outro, adicionar
+    // Create links between faces
+    for (int i = 0; i < mesh.size(); i++) {
+        for (int j = i + 1; j < mesh.size(); j++) {
+            if (countMatches(&mesh[i], &mesh[j]) >= 2) {
+                // The two nodes share an edge
                 bool found = false;
-                for (node* n : mesh[i].nodes) {
-                    if (n == &mesh[j]) {
+                for (auto n : mesh[i].nodes) {
+                    if (n == j) {
                         found = true;
                         break;
                     }
                 }
                 if (!found) {
-                    mesh[i].nodes.push_back(&mesh[j]);
-                    mesh[j].nodes.push_back(&mesh[i]);
+                    mesh[i].nodes.push_back(j);
+                    mesh[j].nodes.push_back(i);
                 }
             }
         }
     }
 }
 
-bool NavMesh::pointInsideTriangle(const node & triangle, const glm::vec3 & point) {
-    glm::vec3 v0 = * triangle.v2 - * triangle.v1;
-    glm::vec3 v1 = * triangle.v3 - * triangle.v1;
-    glm::vec3 v2 = point - * triangle.v1;
+float distance(const glm::vec3 & begin, const glm::vec3 & end) {
+    return glm::length(begin - end);
+}
+
+bool pointInsideTriangle(const node & triangle, const glm::vec3 & point) {
+    glm::vec3 v0 = triangle.vertices[1] - triangle.vertices[0];
+    glm::vec3 v1 = triangle.vertices[2] - triangle.vertices[0];
+    glm::vec3 v2 = point - triangle.vertices[0];
 
     float d00 = glm::dot(v0, v0);
     float d01 = glm::dot(v0, v1);
@@ -93,149 +90,101 @@ bool NavMesh::pointInsideTriangle(const node & triangle, const glm::vec3 & point
     return (u >= 0) && (v >= 0) && (u + v < 1);
 }
 
-struct openPoint {
-    glm::vec3 begin, * end;
+struct possiblePoint {
+    int begin, end;
     float g, h;
 };
 
-bool compare(const openPoint &a, const openPoint &b) {
+bool compare(const possiblePoint &a, const possiblePoint &b) {
     return (a.g + a.h) < (b.g + b.h);
 }
 
-inline bool vertexOfTriangle(glm::vec3 & _vertex, node & triangle) {
-    return _vertex == *triangle.v1 || _vertex == *triangle.v2 || _vertex == *triangle.v3;
+glm::vec3 barycenter(node * node) {
+    glm::vec3 barycenter = (1.f / 2.f) * (node->vertices[0] + node->vertices[1]);
+    barycenter = (0.5) * (barycenter + node->vertices[2]);
+    return barycenter;
 }
 
-// Should probably use pointers here
-vertex & NavMesh::findVertex(const glm::vec3 & coord) {
-    for (auto & v : vertices) {
-        if (v.pos == coord) {
-            return v;
-        }
+int findInPossiblePoints(const std::vector<possiblePoint>& list, int node) {
+    for (int i = 0; i < list.size(); i++) {
+        if (list[i].end == node) return i;
     }
+    return -1;
 }
 
-openPoint * findInOpenPoints(std::vector<openPoint> & openPoints, glm::vec3 & coord) {
-    for (openPoint & p : openPoints) {
-        if (*p.end == coord) return &p;
-    }
-    return nullptr;
-}
-
-std::vector<std::pair<glm::vec3, glm::vec3>> NavMesh::findPath(glm::vec3 & begin, glm::vec3 & end) {
-    std::vector<std::pair<glm::vec3, glm::vec3>> result;
+std::vector<glm::vec3> NavMesh::findPath(glm::vec3 & begin, glm::vec3 & end) {
+    // TODO : Optimize using a min-heap
+    std::vector<std::pair<int, int>> path;
     // Find triangle of the starting point
-    node* beginTriangle = nullptr;
-    for (auto & n : mesh) {
-        if (pointInsideTriangle(n, begin)) {
-            beginTriangle = &n;
+    int beginNode = -1;
+    for (int i = 0; i < mesh.size(); i++) {
+        if (pointInsideTriangle(mesh[i], begin)) {
+            beginNode = i;
             break;
         }
     }
     // Find triangle of the ending point
-    node* endTriangle = nullptr;
-    for (auto & n : mesh) {
-        if (pointInsideTriangle(n, end)) {
-            endTriangle = &n;
+    int endNode = -1;
+    for (int i = 0; i < mesh.size(); i++) {
+        if (pointInsideTriangle(mesh[i], end)) {
+            endNode = i;
             break;
         }
     }
     // Find the path between the two
-    if (beginTriangle != nullptr && endTriangle != nullptr) {
-        result.emplace_back(begin, begin);
-        if (beginTriangle != endTriangle) {
+    if (beginNode != -1 && endNode != -1) {
+        path.emplace_back(beginNode, beginNode);
+        if (beginNode != endNode) {
             // Run the A* search algorithm
 
-            std::vector<openPoint> openPoints;
+            std::vector<possiblePoint> possiblePoints;
             float totalDistance = 0;
-            openPoints.push_back({begin, beginTriangle->v1, distance(begin, *beginTriangle->v1), distance(end, *beginTriangle->v1)});
-            openPoints.push_back({begin, beginTriangle->v2, distance(begin, *beginTriangle->v2), distance(end, *beginTriangle->v2)});
-            openPoints.push_back({begin, beginTriangle->v3, distance(begin, *beginTriangle->v3), distance(end, *beginTriangle->v3)});
-
-            auto shortest = std::min_element(openPoints.begin(), openPoints.end(), compare);
-            result.emplace_back(shortest->begin, *shortest->end);
-            totalDistance += distance(shortest->begin, *shortest->end);
-            openPoints.erase(shortest);
-
-            // TODO : Optimize using a binaryHeap
-            while (!vertexOfTriangle(result.back().second, *endTriangle)) {
-                auto v = findVertex(result.back().second);
-                for (auto n : v.nodes) {
-                    openPoint * p;
-                    if (*mesh[n].v1 != result.back().second) {
-                        p = findInOpenPoints(openPoints, *mesh[n].v1);
-                        if (p != nullptr) {
-                            float cost = distance(result.back().second, *mesh[n].v1);
-                            if (cost < p->g) {
-                                p->begin = result.back().second;
-                                p->g = totalDistance + cost;
-                            }
-                        } else {
-                            // Add vertex
-                            openPoints.push_back({result.back().second, mesh[n].v1, totalDistance + distance(result.back().second, *mesh[n].v1), distance(*mesh[n].v1, end)});
+            do {
+                // put points inside the list
+                for (auto node : mesh[path.back().second].nodes) {
+                    int nodePos = findInPossiblePoints(possiblePoints, node);
+                    float cost = distance(barycenter(&mesh[path.back().second]), barycenter(&mesh[node]));
+                    if (nodePos >= 0) {
+                        // Update
+                        if (cost < possiblePoints[nodePos].g) {
+                            possiblePoints[nodePos].begin = path.back().second;
+                            possiblePoints[nodePos].g = totalDistance + cost;
                         }
-                    }
-                    if (*mesh[n].v2 != result.back().second) {
-                        p = findInOpenPoints(openPoints, *mesh[n].v2);
-                        if (p != nullptr) {
-                            float cost = distance(result.back().second, *mesh[n].v2);
-                            if (cost < p->g) {
-                                p->begin = result.back().second;
-                                p->g = totalDistance + cost;
-                            }
-                        } else {
-                            // Add vertex
-                            openPoints.push_back({result.back().second, mesh[n].v2, totalDistance + distance(result.back().second, *mesh[n].v2), distance(*mesh[n].v2, end)});
-                        }
-                    }
-                    if (*mesh[n].v3 != result.back().second) {
-                        p = findInOpenPoints(openPoints, *mesh[n].v3);
-                        if (p != nullptr) {
-                            float cost = distance(result.back().second, *mesh[n].v3);
-                            if (cost < p->g) {
-                                p->begin = result.back().second;
-                                p->g = totalDistance + cost;
-                            }
-                        } else {
-                            // Add vertex
-                            openPoints.push_back({result.back().second, mesh[n].v3, totalDistance + distance(result.back().second, *mesh[n].v3), distance(*mesh[n].v3, end)});
-                        }
+                    } else {
+                        possiblePoints.push_back({path.back().second, node, totalDistance + cost,
+                            distance(barycenter(&mesh[node]), barycenter(&mesh[endNode]))});
                     }
                 }
 
-                shortest = std::min_element(openPoints.begin(), openPoints.end(), compare);
-                result.emplace_back(shortest->begin, *shortest->end);
-                totalDistance = shortest->g + distance(shortest->begin, *shortest->end);
-                openPoints.erase(shortest);
-            }
+                // TODO: find shortest
+                auto shortest = std::min_element(possiblePoints.begin(), possiblePoints.end(), compare);
+                path.emplace_back(shortest->begin, shortest->end);
+                totalDistance = shortest->g + distance(barycenter(&mesh[shortest->begin]), barycenter(&mesh[shortest->end]));
+                possiblePoints.erase(shortest);
+            } while(path.back().second != endNode);
         }
-        result.emplace_back(result.back().second, end);
     } else {
          std::cerr << "ERROR::NavMesh::Points outside of the navmesh." << std::endl;
     }
 
-    unsigned i = result.size() - 2;
+    // Clear path of dead end branches
+    int i = path.size() - 1;
     while (true) {
-        if (i >= result.size()) i = result.size() - 2;
+        if (i >= path.size()) i = path.size() - 1;
         if (i - 1 <= 0) break;
-        if (result[i].first == result[i - 1].second) i--;
-        else result.erase(result.begin() + (i - 1));
+        if (path[i].first == path[i - 1].second) i--;
+        else path.erase(path.begin() + (i - 1));
     }
 
-    // TODO : Probably clean up the path from some unnecessary points
-    // Run by all the points and check if you can skip the next point without falling off the navmesh
-
+    // TODO : Add a string pulling algorithm here
+    // Make a list of points
+    std::vector<glm::vec3> result;
+    for (auto pair : path) {
+        result.emplace_back(barycenter(&mesh[pair.second]));
+    }
     return result;
 }
 
-int NavMesh::numberOfVertices() {
-    return vertices.size();
-}
-
-int NavMesh::numberOfFaces() {
+int NavMesh::numberOfNodes() {
     return mesh.size();
-}
-
-float NavMesh::distance(const glm::vec3 & begin, const glm::vec3 & end) {
-    return glm::length(begin - end);
 }

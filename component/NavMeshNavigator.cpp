@@ -13,7 +13,7 @@ NavMeshNavigator::NavMeshNavigator(NavMesh * navMesh) {
 
 glm::vec3  NavMeshNavigator::nextStep(float dt) {
     if (path.size() > 1 && lastPoint < path.size() - 1) {
-        glm::vec3 direction = path[lastPoint + 1].second - path[lastPoint].second;
+        glm::vec3 direction = path[lastPoint + 1] - path[lastPoint];
         totalDistance += walkingSpeed * dt;
         double deltaDistance = totalDistance - lastDistance;
 
@@ -23,14 +23,14 @@ glm::vec3  NavMeshNavigator::nextStep(float dt) {
                 lastPoint = path.size() - 1;
                 break;
             }
-            direction = path[lastPoint].second - path[lastPoint - 1].second;
+            direction = path[lastPoint] - path[lastPoint - 1];
             lastDistance += glm::length(direction);
             deltaDistance = totalDistance - lastDistance;
         }
         if (lastPoint == path.size() - 1) {
-            return path.back().second;
+            return path.back();
         } else {
-            return path[lastPoint].second + glm::normalize(direction) * (deltaDistance + walkingSpeed * dt / glm::length(direction));
+            return path[lastPoint] + glm::normalize(direction) * (deltaDistance + walkingSpeed * dt / glm::length(direction));
         }
     } else {
         return object->getTransform()->getPosition();
@@ -40,7 +40,8 @@ glm::vec3  NavMeshNavigator::nextStep(float dt) {
 void NavMeshNavigator::setDestination(glm::vec3 & vec) {
     this->destination = vec;
     auto begin = this->object->getTransform()->getPosition();
-    //this->path = navMesh->findPath(begin, this->destination);
+    std::cout << "(" << begin.x << ", " << begin.y << ", " << begin.z << ") -> (" << this->destination.x <<  ", " << this->destination.y << ", " << this->destination.z << ")" << std::endl;
+    this->path = navMesh->findPath(begin, this->destination);
     totalDistance = 0;
     lastDistance = 0;
     lastPoint = 0;

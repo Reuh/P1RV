@@ -18,14 +18,23 @@
 using namespace glm;
 
 void TestScene::initialize() {
+    /*
     auto level = new GameObject();
     auto levelCollisions = new ModelRenderer("models/level/levelcollisions.obj");
     levelCollisions->object = level; // need to be set manually since this component is never actually added to the object
     level->addComponent(new ModelRenderer("models/level/level.obj"));
     level->addComponent(levelCollisions->makeCollider(true));
     addObject(level);
+    */
+
+    auto level = new GameObject();
+    level->addComponent(new ModelRenderer("models/level/navmesh.obj"));
+    addObject(level);
 
     auto player = new GameObject();
+    player->addComponent(new BoxCollider(true, vec3(-.2,0.01,-.2), vec3(.2,.7,.2)));
+    player->getTransform()->setPosition(glm::vec3(0,1,36.5));
+    addObject(player);
 
     auto skybox = new GameObject();
     skybox->getTransform()->scale(glm::vec3(50,50,50));
@@ -35,14 +44,16 @@ void TestScene::initialize() {
     skybox->addComponent(new SkyboxScript(player));
     addObject(skybox);
 
-    auto enemy = new GameObject();
-
     auto playerRelic = new GameObject();
     playerRelic->addComponent(new ModelRenderer("models/Relic.obj"));
     playerRelic->getTransform()->setPosition(glm::vec3(0, 0, -34));
     playerRelic->getTransform()->scale(glm::vec3(0.4, 0.4, 0.4));
     playerRelic->addComponent(new RelicScript(playerRelic, player, glm::vec3(0,0,36.5)));
     addObject(playerRelic);
+
+    player->addComponent(new PlayerScript(playerRelic));
+
+    auto enemy = new GameObject();
 
     auto enemyRelic = new GameObject();
     enemyRelic->addComponent(new ModelRenderer("models/Relic.obj"));
@@ -51,12 +62,8 @@ void TestScene::initialize() {
     enemyRelic->addComponent(new RelicScript(enemyRelic, enemy, glm::vec3(0,0,-36.5)));
     addObject(enemyRelic);
 
-    player->addComponent(new PlayerScript(playerRelic));
-    player->addComponent(new BoxCollider(true, vec3(-.2,0.01,-.2), vec3(.2,.7,.2)));
-    player->getTransform()->setPosition(glm::vec3(0,1,36.5));
-    addObject(player);
-
     auto navmesh = new NavMesh("models/level/navmesh.obj");
+
     Transform* transform = enemy->getTransform();
     transform->scale(vec3(0.4,0.4,0.4));
     transform->translate(vec3(0,0,-36.5));
